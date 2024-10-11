@@ -25,9 +25,6 @@
     section {
         width: 100%;
         height: 100dvh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         position: relative;
         overflow: hidden;
     }

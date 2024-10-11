@@ -1,47 +1,83 @@
 <script lang="ts">
+    export let width: number;
     export let height: number;
+
+    export let minWidth: number;
     export let minHeight: number;
-    export let window: HTMLElement;
-    export let hitboxes: boolean;
+
     export let top: number;
+    export let left: number;
+
+    export let hitboxes: boolean;
+    export let window: HTMLElement;
 
     let prevTop = 0;
+    let prevLeft = 0;
+
     let prevHeight = 0;
-    let topComp = 0;
-    let bottomComp = 0;
+    let prevWidth = 0;
 
-
-    let topBarActive = false;
-    let bottomBarActive = false;
+    let mouseCompensation = 0;
+    let aBarIsActive = false;
 
     function topMouseMove(e: MouseEvent) {
-        if (e.buttons === 0) topComp = e.layerY;
+        if (e.buttons === 0) mouseCompensation = e.layerY;
         if (e.buttons !== 1) {
-            topBarActive = false;
+            aBarIsActive = false;
             return;
         }
-        if (topBarActive === false) {
+        if (aBarIsActive === false) {
             prevTop = window.getBoundingClientRect().top;
             prevHeight = height;
         }
-        topBarActive = true;
+        aBarIsActive = true;
 
-        top = Math.min(e.clientY + topComp, prevTop + prevHeight - ( minHeight + 8 ));
-        height = Math.max(prevHeight + (prevTop - top - 8), minHeight);
+        top = Math.min(e.clientY + (9 - mouseCompensation), prevTop + prevHeight - minHeight);
+        height = Math.max(prevHeight + (prevTop - top), minHeight); 
+    }
+
+    function leftMouseMove(e: MouseEvent) {
+        if (e.buttons === 0) mouseCompensation = e.layerX;
+        if (e.buttons !== 1) {
+            aBarIsActive = false;
+            return;
+        }
+        if (aBarIsActive === false) {
+            prevLeft = window.getBoundingClientRect().left;
+            prevWidth = width;
+        }
+        aBarIsActive = true;
+
+        left = Math.min(e.clientX + (9 - mouseCompensation), prevLeft + prevWidth - minWidth);
+        width = Math.max(prevWidth + (prevLeft - left), minWidth); 
     }
 
     function bottomMouseMove(e: MouseEvent) {
-        if (e.buttons === 0) bottomComp = e.layerY;
+        if (e.buttons === 0) mouseCompensation = e.layerY;
         if (e.buttons !== 1) {
-            bottomBarActive = false;
+            aBarIsActive = false;
             return;
         }
-        if (bottomBarActive === false) {
+        if (aBarIsActive === false) {
             prevTop = window.getBoundingClientRect().top;
             prevHeight = height;
         }
-        bottomBarActive = true;
-        height = Math.max(e.clientY - bottomComp - prevTop, minHeight);
+        aBarIsActive = true;
+        height = Math.max(e.clientY - mouseCompensation - prevTop, minHeight);
+    }
+
+    function rightMouseMove(e: MouseEvent) {
+        if (e.buttons === 0) mouseCompensation = e.layerX;
+        if (e.buttons !== 1) {
+            aBarIsActive = false;
+            return;
+        }
+        if (aBarIsActive === false) {
+            prevLeft = window.getBoundingClientRect().left;
+            prevWidth = width;
+        }
+        aBarIsActive = true;
+        width = Math.max(e.clientX - mouseCompensation - prevLeft, minWidth);
     }
 </script>
 
@@ -50,7 +86,13 @@
     <div class="verticalResiser topResiser" on:mousemove={topMouseMove} />
 
     <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="horizontalResiser rightResiser" on:mousemove={rightMouseMove} />
+
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="verticalResiser bottomResiser" on:mousemove={bottomMouseMove} />
+
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="horizontalResiser leftResiser" on:mousemove={leftMouseMove} />
 </div>
 
 <style>
@@ -71,10 +113,23 @@
         pointer-events: all;
     }
 
+    .horizontalResiser {
+        width: 10px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        pointer-events: all;
+    }
+
     .topResiser {top: -10px}
+    .rightResiser {right: -10px}
     .bottomResiser {bottom: -10px}
+    .leftResiser {left: -10px}
+
     .topResiser:active {top: -1000px}
+    .rightResiser:active {right: -1000px}
     .bottomResiser:active {bottom: -1000px}
+    .leftResiser:active {left: -1000px}
 
     .verticalResiser:active {
         height: 2000px;
@@ -82,14 +137,29 @@
         left: -500px;
     }
 
-    .verticalResiser:hover {cursor: n-resize}
-
-    .topResiser:active + .bottomResiser {
-        pointer-events: none;
+    .horizontalResiser:active {
+        width: 2000px;
+        height: calc(1000px + 100%);
+        top: -500px;
     }
+
+    .verticalResiser:hover {cursor: n-resize}
+    .horizontalResiser:hover {cursor: w-resize}
+
+    .par:has(.topResiser:active) *:not(.topResiser),
+    .par:has(.rightResiser:active) *:not(.rightResiser),
+    .par:has(.bottomResiser:active) *:not(.bottomResiser),
+    .par:has(.leftResiser:active) *:not(.leftResiser) {pointer-events: none}
+
+    .par.debug:has(.topResiser:active) *:not(.topResiser),
+    .par.debug:has(.rightResiser:active) *:not(.rightResiser),
+    .par.debug:has(.bottomResiser:active) *:not(.bottomResiser),
+    .par.debug:has(.leftResiser:active) *:not(.leftResiser) {background-color: #ff000085}
 
     /* The hiboxes colors */
     .par.debug {background-color: #ff00004b}
     .par.debug .topResiser {background-color: #559bf752}
+    .par.debug .rightResiser {background-color: #55f7e152}
     .par.debug .bottomResiser {background-color: #d155f752}
+    .par.debug .leftResiser {background-color: #f7ab5552}
 </style>
