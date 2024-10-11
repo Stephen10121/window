@@ -1,3 +1,34 @@
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+    import Debugger from "$lib/Debugger.svelte";
+    import Window from "$lib/Window.svelte";
+
+    let hitboxes = true;
+</script>
+
+<Debugger>
+    <label>
+        <input type="checkbox" bind:checked={hitboxes} />
+        <p>Show Hitboxes</p>
+    </label>
+</Debugger>
+
+<section>
+    <Window {hitboxes} />
+</section>
+
+<style>
+    :global(body) {
+        padding: 0;
+        margin: 0;
+    }
+    
+    section {
+        width: 100%;
+        height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+</style>
