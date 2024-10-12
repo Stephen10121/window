@@ -2,18 +2,18 @@
     import Debugger from "$lib/Debugger.svelte";
     import Window from "$lib/Window.svelte";
 
-    let hitboxes = true;
+    let showHitboxes = true;
 </script>
 
 <Debugger>
     <label>
-        <input type="checkbox" bind:checked={hitboxes} />
+        <input type="checkbox" bind:checked={showHitboxes} />
         <p>Show Hitboxes</p>
     </label>
 </Debugger>
 
 <section>
-    <Window {hitboxes} />
+    <Window {showHitboxes} />
 </section>
 
 <style>

@@ -9,7 +9,7 @@
     export let left: number;
 
     export let hitboxes: boolean;
-    export let window: HTMLElement;
+    export let windowBox: HTMLElement;
 
     let prevTop = 0;
     let prevLeft = 0;
@@ -20,14 +20,23 @@
     let mouseCompensation = 0;
     let aBarIsActive = false;
 
+    function clearSelection() {
+        //@ts-ignore
+        if (window.getSelection) {window.getSelection().removeAllRanges();}
+        //@ts-ignore
+        else if (document.selection) {document.selection.empty();}
+    }
+
     function topMouseMove(e: MouseEvent) {
         if (e.buttons === 0) mouseCompensation = e.layerY;
-        if (e.buttons !== 1) {
+        //@ts-ignore
+        if (e.buttons !== 1 || !e.target?.matches(":active")) {
+            if (aBarIsActive) clearSelection();
             aBarIsActive = false;
             return;
         }
         if (aBarIsActive === false) {
-            prevTop = window.getBoundingClientRect().top;
+            prevTop = windowBox.getBoundingClientRect().top;
             prevHeight = height;
         }
         aBarIsActive = true;
@@ -38,12 +47,14 @@
 
     function leftMouseMove(e: MouseEvent) {
         if (e.buttons === 0) mouseCompensation = e.layerX;
-        if (e.buttons !== 1) {
+        //@ts-ignore
+        if (e.buttons !== 1 || !e.target?.matches(":active")) {
+            if (aBarIsActive) clearSelection();
             aBarIsActive = false;
             return;
         }
         if (aBarIsActive === false) {
-            prevLeft = window.getBoundingClientRect().left;
+            prevLeft = windowBox.getBoundingClientRect().left;
             prevWidth = width;
         }
         aBarIsActive = true;
@@ -54,12 +65,14 @@
 
     function bottomMouseMove(e: MouseEvent) {
         if (e.buttons === 0) mouseCompensation = e.layerY;
-        if (e.buttons !== 1) {
+        //@ts-ignore
+        if (e.buttons !== 1 || !e.target?.matches(":active")) {
+            if (aBarIsActive) clearSelection();
             aBarIsActive = false;
             return;
         }
         if (aBarIsActive === false) {
-            prevTop = window.getBoundingClientRect().top;
+            prevTop = windowBox.getBoundingClientRect().top;
             prevHeight = height;
         }
         aBarIsActive = true;
@@ -68,12 +81,14 @@
 
     function rightMouseMove(e: MouseEvent) {
         if (e.buttons === 0) mouseCompensation = e.layerX;
-        if (e.buttons !== 1) {
+        //@ts-ignore
+        if (e.buttons !== 1 || !e.target?.matches(":active")) {
+            if (aBarIsActive) clearSelection();
             aBarIsActive = false;
             return;
         }
         if (aBarIsActive === false) {
-            prevLeft = window.getBoundingClientRect().left;
+            prevLeft = windowBox.getBoundingClientRect().left;
             prevWidth = width;
         }
         aBarIsActive = true;

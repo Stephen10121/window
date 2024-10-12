@@ -1,6 +1,21 @@
 <script lang="ts">
     import Resizers from "./Resizers.svelte";
 
+    /**
+     * Sets the width of the box measured in pixels.
+     * If you don't set the width then the default will be 500px wide.
+     * @example
+     * <Window width={700} />
+     * 
+     * You can also bind a variable to the width.
+     * 
+     * @example
+     * <script>
+     *     let boxWidth = 200;
+     * <\\/script>
+     * 
+     * <Window bind:width={boxWidth} />
+     */
     export let width = 500;
     export let height = 500;
 
@@ -8,29 +23,29 @@
     export let minWidth = 200;
 
     export let resizable = true;
-    export let hitboxes = false;
+    export let showHitboxes = false;
 
     let focused = true;
 
     let top = 200;
     let left = 200;
 
-    let window: HTMLElement;
+    let windowBox: HTMLElement;
 </script>
 
 <section
-    bind:this={window}
+    bind:this={windowBox}
     class="window"
     style="--width:{width}px;--height:{height}px;--top:{top}px;--left:{left}px;"
 >
     {#if resizable && focused}
         <Resizers
-            {window}
+            {windowBox}
             bind:height
             bind:width
             bind:top
             bind:left
-            {hitboxes}
+            hitboxes={showHitboxes}
             {minHeight}
             {minWidth}
         />
