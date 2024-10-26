@@ -9,7 +9,6 @@
     export let left: number;
 
     export let hitboxes: boolean;
-    export let draggerHeight = 50;
     export let windowBox: HTMLElement;
 
     let prevTop = 0;
@@ -100,25 +99,6 @@
         aBarIsActive = true;
         width = Math.max(e.clientX - xMouseCompensation - prevLeft, minWidth);
     }
-
-    function resizeMouseMove(e: MouseEvent) {
-        if (e.buttons === 0) {
-            yMouseCompensation = e.layerY;
-            xMouseCompensation = e.layerX;
-        }
-        //@ts-ignore
-        if (e.buttons !== 1 || !e.target?.matches(":active")) {
-            if (aBarIsActive) clearSelection();
-            aBarIsActive = false;
-            return;
-        }
-        if (aBarIsActive === false) {
-            clearSelection();
-        }
-        aBarIsActive = true;
-        left = e.clientX - xMouseCompensation;
-        top = e.clientY - yMouseCompensation;
-    }
 </script>
 
 <div class="par {hitboxes ? "debug" : ""}">
@@ -133,9 +113,6 @@
 
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="horizontalResiser leftResiser" on:mousemove={leftMouseMove} />
-
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div style="--dragger-height:{draggerHeight}px;" class="dragger" on:mousemove={resizeMouseMove} />
 </div>
 
 <style>
@@ -146,22 +123,6 @@
         width: 100%;
         height: 100%;
         pointer-events: none;
-    }
-
-    .dragger {
-        width: 100%;
-        height: var(--dragger-height);
-        position: absolute;
-        left: 0;
-        top: 0;
-        pointer-events: all;
-    }
-
-    .dragger:active {
-        height: 2000px;
-        width: calc(2000px + 100%);
-        left: -1000px;
-        top: -1000px;
     }
 
     .verticalResiser {
@@ -194,12 +155,14 @@
         height: 2000px;
         width: calc(1000px + 100%);
         left: -500px;
+        z-index: 201;
     }
 
     .horizontalResiser:active {
         width: 2000px;
         height: calc(1000px + 100%);
         top: -500px;
+        z-index: 201;
     }
 
     .verticalResiser:hover {cursor: n-resize}
@@ -209,12 +172,10 @@
     .par:has(.rightResiser:active) *:not(.rightResiser),
     .par:has(.bottomResiser:active) *:not(.bottomResiser),
     .par:has(.leftResiser:active) *:not(.leftResiser) {pointer-events: none}
-    .par:has(.dragger:active) *:not(.dragger) {pointer-events: none}
 
     .par.debug:has(.topResiser:active) *:not(.topResiser),
     .par.debug:has(.rightResiser:active) *:not(.rightResiser),
     .par.debug:has(.bottomResiser:active) *:not(.bottomResiser),
-    .par.debug:has(.dragger:active) *:not(.dragger),
     .par.debug:has(.leftResiser:active) *:not(.leftResiser) {background-color: #ff000085}
 
     /* The hiboxes colors */
@@ -223,5 +184,4 @@
     .par.debug .rightResiser {background-color: #55f7e152}
     .par.debug .bottomResiser {background-color: #d155f752}
     .par.debug .leftResiser {background-color: #f7ab5552}
-    .par.debug .dragger {background-color: #55f77052}
 </style>

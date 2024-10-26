@@ -2,6 +2,7 @@
     import type { Writable } from "svelte/store";
     import Resizers from "./Resizers.svelte";
     import { onMount } from "svelte";
+    import Dragger from "./Dragger.svelte";
 
     /**
      * Sets the width of the box measured in pixels.
@@ -58,6 +59,7 @@
     <section class="content">
         <slot />
     </section>
+    
     {#if resizable && focused}
         <Resizers
             {windowBox}
@@ -68,16 +70,19 @@
             hitboxes={showHitboxes}
             {minHeight}
             {minWidth}
-            {draggerHeight}
         />
     {/if}
-    <!-- <p>Height: {height}</p>
-    <p>Top: {top}</p>
-    <p>Width: {width}</p>
-    <p>Left: {left}</p> -->
+
     {#if !focused}
         <div class="notFocused" />
     {/if}
+
+    <Dragger
+        bind:top
+        bind:left
+        hitboxes={showHitboxes}
+        {draggerHeight}
+    />
 </section>
 
 <style>
