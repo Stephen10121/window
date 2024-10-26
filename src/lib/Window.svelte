@@ -1,5 +1,7 @@
 <script lang="ts">
+    import type { Writable } from "svelte/store";
     import Resizers from "./Resizers.svelte";
+    import { onMount } from "svelte";
 
     /**
      * Sets the width of the box measured in pixels.
@@ -22,22 +24,40 @@
     export let minHeight = 200;
     export let minWidth = 200;
 
-    export let resizable = true;
+    export let currentFocusStore: Writable<{currentFocus: string}>;
     export let showHitboxes = false;
+    export let draggerHeight = 50;
+    export let resizable = true;
+    export let id: string;
 
-    let focused = true;
 
+    let focused = false;
     let top = 200;
     let left = 200;
 
     let windowBox: HTMLElement;
+
+    onMount(() => {
+        const currentFocusStoreUnsubscribe = currentFocusStore.subscribe((data) => {
+            focused = data.currentFocus === id;
+        });
+
+        return () => {
+            currentFocusStoreUnsubscribe();
+        }
+    });
 </script>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <section
     bind:this={windowBox}
-    class="window"
+    on:mousedown={() => {currentFocusStore.set({currentFocus: id})}}
+    class="window {focused ? "focused" : ""}"
     style="--width:{width}px;--height:{height}px;--top:{top}px;--left:{left}px;"
 >
+    <section class="content">
+        <slot />
+    </section>
     {#if resizable && focused}
         <Resizers
             {windowBox}
@@ -48,12 +68,16 @@
             hitboxes={showHitboxes}
             {minHeight}
             {minWidth}
+            {draggerHeight}
         />
     {/if}
-    <p>Height: {height}</p>
+    <!-- <p>Height: {height}</p>
     <p>Top: {top}</p>
     <p>Width: {width}</p>
-    <p>Left: {left}</p>
+    <p>Left: {left}</p> -->
+    {#if !focused}
+        <div class="notFocused" />
+    {/if}
 </section>
 
 <style>
@@ -64,5 +88,30 @@
         top: var(--top);
         left: var(--left);
         border: 1px solid black;
+        isolation: isolate;
+    }
+
+    .window.focused {
+        z-index: 200;
+    }
+
+    .content {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        isolation: isolate;
+    }
+
+    .notFocused {
+        background-color: rgba(255, 255, 255, 0.096);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 200;
     }
 </style>

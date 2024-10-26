@@ -9,6 +9,7 @@
     export let left: number;
 
     export let hitboxes: boolean;
+    export let draggerHeight = 50;
     export let windowBox: HTMLElement;
 
     let prevTop = 0;
@@ -17,7 +18,8 @@
     let prevHeight = 0;
     let prevWidth = 0;
 
-    let mouseCompensation = 0;
+    let xMouseCompensation = 0;
+    let yMouseCompensation = 0;
     let aBarIsActive = false;
 
     function clearSelection() {
@@ -28,7 +30,7 @@
     }
 
     function topMouseMove(e: MouseEvent) {
-        if (e.buttons === 0) mouseCompensation = e.layerY;
+        if (e.buttons === 0) yMouseCompensation = e.layerY;
         //@ts-ignore
         if (e.buttons !== 1 || !e.target?.matches(":active")) {
             if (aBarIsActive) clearSelection();
@@ -36,17 +38,18 @@
             return;
         }
         if (aBarIsActive === false) {
+            clearSelection();
             prevTop = windowBox.getBoundingClientRect().top;
             prevHeight = height;
         }
         aBarIsActive = true;
 
-        top = Math.min(e.clientY + (9 - mouseCompensation), prevTop + prevHeight - minHeight);
+        top = Math.min(e.clientY + (9 - yMouseCompensation), prevTop + prevHeight - minHeight);
         height = Math.max(prevHeight + (prevTop - top), minHeight); 
     }
 
     function leftMouseMove(e: MouseEvent) {
-        if (e.buttons === 0) mouseCompensation = e.layerX;
+        if (e.buttons === 0) xMouseCompensation = e.layerX;
         //@ts-ignore
         if (e.buttons !== 1 || !e.target?.matches(":active")) {
             if (aBarIsActive) clearSelection();
@@ -54,17 +57,18 @@
             return;
         }
         if (aBarIsActive === false) {
+            clearSelection();
             prevLeft = windowBox.getBoundingClientRect().left;
             prevWidth = width;
         }
         aBarIsActive = true;
 
-        left = Math.min(e.clientX + (9 - mouseCompensation), prevLeft + prevWidth - minWidth);
+        left = Math.min(e.clientX + (9 - xMouseCompensation), prevLeft + prevWidth - minWidth);
         width = Math.max(prevWidth + (prevLeft - left), minWidth); 
     }
 
     function bottomMouseMove(e: MouseEvent) {
-        if (e.buttons === 0) mouseCompensation = e.layerY;
+        if (e.buttons === 0) yMouseCompensation = e.layerY;
         //@ts-ignore
         if (e.buttons !== 1 || !e.target?.matches(":active")) {
             if (aBarIsActive) clearSelection();
@@ -72,15 +76,16 @@
             return;
         }
         if (aBarIsActive === false) {
+            clearSelection();
             prevTop = windowBox.getBoundingClientRect().top;
             prevHeight = height;
         }
         aBarIsActive = true;
-        height = Math.max(e.clientY - mouseCompensation - prevTop, minHeight);
+        height = Math.max(e.clientY - yMouseCompensation - prevTop, minHeight);
     }
 
     function rightMouseMove(e: MouseEvent) {
-        if (e.buttons === 0) mouseCompensation = e.layerX;
+        if (e.buttons === 0) xMouseCompensation = e.layerX;
         //@ts-ignore
         if (e.buttons !== 1 || !e.target?.matches(":active")) {
             if (aBarIsActive) clearSelection();
@@ -88,11 +93,31 @@
             return;
         }
         if (aBarIsActive === false) {
+            clearSelection();
             prevLeft = windowBox.getBoundingClientRect().left;
             prevWidth = width;
         }
         aBarIsActive = true;
-        width = Math.max(e.clientX - mouseCompensation - prevLeft, minWidth);
+        width = Math.max(e.clientX - xMouseCompensation - prevLeft, minWidth);
+    }
+
+    function resizeMouseMove(e: MouseEvent) {
+        if (e.buttons === 0) {
+            yMouseCompensation = e.layerY;
+            xMouseCompensation = e.layerX;
+        }
+        //@ts-ignore
+        if (e.buttons !== 1 || !e.target?.matches(":active")) {
+            if (aBarIsActive) clearSelection();
+            aBarIsActive = false;
+            return;
+        }
+        if (aBarIsActive === false) {
+            clearSelection();
+        }
+        aBarIsActive = true;
+        left = e.clientX - xMouseCompensation;
+        top = e.clientY - yMouseCompensation;
     }
 </script>
 
@@ -108,6 +133,9 @@
 
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="horizontalResiser leftResiser" on:mousemove={leftMouseMove} />
+
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div style="--dragger-height:{draggerHeight}px;" class="dragger" on:mousemove={resizeMouseMove} />
 </div>
 
 <style>
@@ -118,6 +146,22 @@
         width: 100%;
         height: 100%;
         pointer-events: none;
+    }
+
+    .dragger {
+        width: 100%;
+        height: var(--dragger-height);
+        position: absolute;
+        left: 0;
+        top: 0;
+        pointer-events: all;
+    }
+
+    .dragger:active {
+        height: 2000px;
+        width: calc(2000px + 100%);
+        left: -1000px;
+        top: -1000px;
     }
 
     .verticalResiser {
@@ -165,10 +209,12 @@
     .par:has(.rightResiser:active) *:not(.rightResiser),
     .par:has(.bottomResiser:active) *:not(.bottomResiser),
     .par:has(.leftResiser:active) *:not(.leftResiser) {pointer-events: none}
+    .par:has(.dragger:active) *:not(.dragger) {pointer-events: none}
 
     .par.debug:has(.topResiser:active) *:not(.topResiser),
     .par.debug:has(.rightResiser:active) *:not(.rightResiser),
     .par.debug:has(.bottomResiser:active) *:not(.bottomResiser),
+    .par.debug:has(.dragger:active) *:not(.dragger),
     .par.debug:has(.leftResiser:active) *:not(.leftResiser) {background-color: #ff000085}
 
     /* The hiboxes colors */
@@ -177,4 +223,5 @@
     .par.debug .rightResiser {background-color: #55f7e152}
     .par.debug .bottomResiser {background-color: #d155f752}
     .par.debug .leftResiser {background-color: #f7ab5552}
+    .par.debug .dragger {background-color: #55f77052}
 </style>
