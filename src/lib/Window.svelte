@@ -24,11 +24,17 @@
 
     export let minHeight = 200;
     export let minWidth = 200;
+    
+    export let draggerHeight = "50px";
+    export let draggerWidth = "100%";
+    export let draggerTop = 0;
+    export let draggerLeft = 0;
+
+    export let resizable = true;
+    export let draggable = true;
 
     export let currentFocusStore: Writable<{currentFocus: string}>;
     export let showHitboxes = false;
-    export let draggerHeight = 50;
-    export let resizable = true;
     export let id: string;
 
 
@@ -59,7 +65,7 @@
     <section class="content">
         <slot />
     </section>
-    
+
     {#if resizable && focused}
         <Resizers
             {windowBox}
@@ -77,12 +83,17 @@
         <div class="notFocused" />
     {/if}
 
-    <Dragger
-        bind:top
-        bind:left
-        hitboxes={showHitboxes}
-        {draggerHeight}
-    />
+    {#if draggable}
+        <Dragger
+            bind:top
+            bind:left
+            hitboxes={showHitboxes}
+            {draggerHeight}
+            {draggerWidth}
+            {draggerTop}
+            {draggerLeft}
+        />
+    {/if}
 </section>
 
 <style>
@@ -92,7 +103,7 @@
         position: absolute;
         top: var(--top);
         left: var(--left);
-        border: 1px solid black;
+        /* border: 1px solid black; */
         isolation: isolate;
     }
 
@@ -106,7 +117,6 @@
         position: absolute;
         top: 0;
         left: 0;
-        overflow: hidden;
         isolation: isolate;
     }
 

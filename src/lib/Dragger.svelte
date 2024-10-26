@@ -3,7 +3,10 @@
     export let left: number;
 
     export let hitboxes: boolean;
-    export let draggerHeight = 50;
+    export let draggerHeight: string;
+    export let draggerWidth: string;
+    export let draggerTop: number;
+    export let draggerLeft: number;
 
     let xMouseCompensation = 0;
     let yMouseCompensation = 0;
@@ -31,14 +34,14 @@
             clearSelection();
         }
         aBarIsActive = true;
-        left = e.clientX - xMouseCompensation;
-        top = e.clientY - yMouseCompensation;
+        left = e.clientX - xMouseCompensation - draggerLeft;
+        top = e.clientY - yMouseCompensation - draggerTop;
     }
 </script>
 
 <div class="par {hitboxes ? "debug" : ""}">
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div style="--dragger-height:{draggerHeight}px;" class="dragger" on:mousemove={resizeMouseMove} />
+    <div style="--dragger-height:{draggerHeight};--dragger-width:{draggerWidth};--dragger-top:{draggerTop}px;--dragger-left:{draggerLeft}px;" class="dragger" on:mousemove={resizeMouseMove} />
 </div>
 
 <style>
@@ -53,11 +56,11 @@
     }
 
     .dragger {
-        width: 100%;
+        width: var(--dragger-width);
         height: var(--dragger-height);
         position: absolute;
-        left: 0;
-        top: 0;
+        left: var(--dragger-left);
+        top: var(--dragger-top);
         pointer-events: all;
     }
 

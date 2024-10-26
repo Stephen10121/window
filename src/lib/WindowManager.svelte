@@ -1,8 +1,10 @@
 <script lang="ts">
     import { writable } from "svelte/store";
 
+    export let setCurrentFocus = "";
+
     let currentFocusStore = writable({
-        currentFocus: ""
+        currentFocus: setCurrentFocus
     });
 </script>
 
@@ -16,7 +18,6 @@
         height: 100%;
         position: relative;
         overflow: hidden;
-        background-color: #dfdfdf;
         isolation: isolate;
     }
 </style>

@@ -28,6 +28,7 @@
         top: 0;
         right: 50px;
         color: #ffffff;
+        padding: 10px;
     }
 
     section div {
@@ -36,7 +37,14 @@
         justify-content: space-between;
     }
 
+    button {
+        width: 20px;
+    }
+
     :global(.debugger123 label) {
         display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
     }
 </style>
