@@ -2,7 +2,6 @@
     export let top: number;
     export let left: number;
 
-    export let hitboxes: boolean;
     export let draggerHeight: string;
     export let draggerWidth: string;
     export let draggerTop: number;
@@ -39,7 +38,7 @@
     }
 </script>
 
-<div class="par {hitboxes ? "debug" : ""}">
+<div class="par">
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div style="--dragger-height:{draggerHeight};--dragger-width:{draggerWidth};--dragger-top:{draggerTop}px;--dragger-left:{draggerLeft}px;" class="dragger" on:mousemove={resizeMouseMove} />
 </div>
@@ -71,29 +70,4 @@
         top: -1000px;
         z-index: 200;
     }
-
-
-
-
-
-    /* .par:has(.topResiser:active) *:not(.topResiser),
-    .par:has(.rightResiser:active) *:not(.rightResiser),
-    .par:has(.bottomResiser:active) *:not(.bottomResiser),
-    .par:has(.leftResiser:active) *:not(.leftResiser) {pointer-events: none}
-
-    .par:has(.dragger:active) *:not(.dragger) {pointer-events: none}
-
-    .par.debug:has(.topResiser:active) *:not(.topResiser),
-    .par.debug:has(.rightResiser:active) *:not(.rightResiser),
-    .par.debug:has(.bottomResiser:active) *:not(.bottomResiser),
-    .par.debug:has(.dragger:active) *:not(.dragger),
-    .par.debug:has(.leftResiser:active) *:not(.leftResiser) {background-color: #ff000085} */
-
-    /* The hiboxes colors */
-    /* .par.debug {background-color: #ff00004b} */
-    /* .par.debug .topResiser {background-color: #559bf752}
-    .par.debug .rightResiser {background-color: #55f7e152}
-    .par.debug .bottomResiser {background-color: #d155f752}
-    .par.debug .leftResiser {background-color: #f7ab5552} */
-    .par.debug .dragger {background-color: #55f77052}
 </style>

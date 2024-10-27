@@ -33,8 +33,7 @@
     export let resizable = true;
     export let draggable = true;
 
-    export let currentFocusStore: Writable<{currentFocus: string}>;
-    export let showHitboxes = false;
+    export let manager: Writable<{currentFocus: string}>;
     export let id: string;
 
 
@@ -45,12 +44,12 @@
     let windowBox: HTMLElement;
 
     onMount(() => {
-        const currentFocusStoreUnsubscribe = currentFocusStore.subscribe((data) => {
+        const managerUnsubscribe = manager.subscribe((data) => {
             focused = data.currentFocus === id;
         });
 
         return () => {
-            currentFocusStoreUnsubscribe();
+            managerUnsubscribe();
         }
     });
 </script>
@@ -58,7 +57,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <section
     bind:this={windowBox}
-    on:mousedown={() => {currentFocusStore.set({currentFocus: id})}}
+    on:mousedown={() => {manager.update((data) => {return {...data, currentFocus: id}})}}
     class="window {focused ? "focused" : ""}"
     style="--width:{width}px;--height:{height}px;--top:{top}px;--left:{left}px;"
 >
@@ -73,7 +72,6 @@
             bind:width
             bind:top
             bind:left
-            hitboxes={showHitboxes}
             {minHeight}
             {minWidth}
         />
@@ -87,7 +85,6 @@
         <Dragger
             bind:top
             bind:left
-            hitboxes={showHitboxes}
             {draggerHeight}
             {draggerWidth}
             {draggerTop}

@@ -3,16 +3,11 @@
     import Window from "$lib/Window.svelte";
     import WindowManager from "$lib/WindowManager.svelte";
 
-    let showHitboxes = false;
     let makeResizable = true;
     let makeDraggable = true;
 </script>
 
 <Debugger>
-    <label>
-        <p>Show Hitboxes</p>
-        <input type="checkbox" bind:checked={showHitboxes} />
-    </label>
     <label>
         <p>Make it draggable</p>
         <input type="checkbox" bind:checked={makeDraggable} />
@@ -24,18 +19,19 @@
 </Debugger>
 
 <main>
-    <WindowManager let:currentFocusStore setCurrentFocus="window1">
+    <WindowManager let:manager>
             <Window
-                {showHitboxes}
                 id="window1"
-                {currentFocusStore}
+                {manager}
                 width={200}
                 height={200}
                 draggerHeight="100%"
                 draggable={makeDraggable}
                 resizable={makeResizable}
             >
-                <div></div>
+                <div>
+                    <h1>Window</h1>
+                </div>
             </Window>
     </WindowManager>
 </main>
@@ -59,5 +55,13 @@
         border-radius: 10px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         background-color: rgba(133, 77, 255, 0.247);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h1 {
+        font-family: sans-serif;
+        font-size: 1.25rem;
     }
 </style>

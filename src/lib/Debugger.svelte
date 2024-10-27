@@ -31,6 +31,10 @@
         padding: 10px;
     }
 
+    section * {
+        font-family: sans-serif;
+    }
+
     section div {
         display: flex;
         align-items: center;

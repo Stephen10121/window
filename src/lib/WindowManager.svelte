@@ -3,13 +3,13 @@
 
     export let setCurrentFocus = "";
 
-    let currentFocusStore = writable({
+    let manager = writable({
         currentFocus: setCurrentFocus
     });
 </script>
 
 <section>
-    <slot {currentFocusStore} />
+    <slot {manager} />
 </section>
 
 <style>
