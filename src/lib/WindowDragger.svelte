@@ -30,8 +30,7 @@
     function mouseIsDown(event: MouseEvent) {
         const parentDimensions = parentWindow?.getBoundingClientRect();
         const desktopDimensions = desktop.getBoundingClientRect();
-
-        console.log(desktopDimensions);
+        
         if (parentDimensions !== undefined) {
             offsetY = event.clientY - parentDimensions.top + desktopDimensions.top;
             offsetX = event.clientX - parentDimensions.left + desktopDimensions.left;

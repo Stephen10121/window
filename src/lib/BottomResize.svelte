@@ -6,12 +6,14 @@
         id,
         parentWindow,
         mouseContext,
-        height = $bindable()
+        height = $bindable(),
+        desktop
     }: {
         id: string,
         parentWindow: HTMLElement,
         mouseContext: MouseContext,
-        height: string
+        height: string,
+        desktop: HTMLElement
     } = $props();
 
     let offsetY = $state(0);
@@ -29,7 +31,8 @@
     }
 
     const mouseMoveResponderDel = mouseContext.addMouseMoveResponder(id, (event) => {
-        if(event.clientY < document.body.clientHeight) height = (event.clientY - offsetY).toString() + "px"
+        const desktopDimension = desktop.getBoundingClientRect();
+        if(event.clientY < document.body.clientHeight) height = (Math.min(event.clientY, desktopDimension.height + desktopDimension.top) - offsetY).toString() + "px"
     })
 
     onDestroy(() => {

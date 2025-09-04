@@ -6,12 +6,14 @@
         id,
         parentWindow,
         mouseContext,
-        width = $bindable()
+        width = $bindable(),
+        desktop
     }: {
        id: string,
        parentWindow: HTMLElement,
        mouseContext: MouseContext,
-       width: string 
+       width: string,
+       desktop: HTMLElement
     } = $props();
 
     let offsetX = $state(0);
@@ -19,6 +21,7 @@
     function mouseIsDown(event: MouseEvent) {
         const parentDimensions = parentWindow?.getBoundingClientRect();
         const resizerDimensions = document.getElementById(id)?.getBoundingClientRect();
+
         if (parentDimensions !== undefined) {
             offsetX = parentDimensions.left;
         }
@@ -29,7 +32,8 @@
     }
 
     const mouseMoveResponderDel = mouseContext.addMouseMoveResponder(id, (event) => {
-        width = (event.clientX - offsetX).toString() + "px"
+        const desktopDimension = desktop.getBoundingClientRect();
+        width = (Math.min(event.clientX, desktopDimension.width + desktopDimension.left) - offsetX).toString() + "px";
     })
 
     onDestroy(() => {

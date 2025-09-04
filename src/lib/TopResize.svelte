@@ -7,13 +7,15 @@
         mouseContext,
         height = $bindable(),
         top = $bindable(),
-        minHeight
+        minHeight,
+        desktop
     }: {
         id: string,
         mouseContext: MouseContext,
         height: string,
         top: string,
-        minHeight: number
+        minHeight: number,
+        desktop: HTMLElement
     } = $props();
 
     let offsetY = $state(0);
@@ -27,12 +29,15 @@
     }
 
     const mouseMoveResponderDel = mouseContext.addMouseMoveResponder(id, (event) => {
+        const desktopDims = desktop.getBoundingClientRect();
+
         const prevTop = parseInt(top.slice(0, -2));
-        const newTop = event.clientY + offsetY;
-        const widthNum = parseInt(height.slice(0, -2))
+        const newTop = event.clientY + offsetY - desktopDims.top;
+        const widthNum = parseInt(height.slice(0, -2));
+
         if (prevTop - newTop + widthNum >=  minHeight && newTop > 0) {
-            top = newTop.toString() + "px";
-            height = (prevTop - newTop + widthNum).toString() + "px";
+            top = (newTop).toString() + "px";
+            height = Math.max(minHeight, prevTop - Math.max(newTop, 0) + widthNum).toString() + "px";
         }
     })
 

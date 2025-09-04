@@ -2,19 +2,27 @@
     import WindowManager from "$lib/WindowManager.svelte";
 </script>
 
-<div class="scroller"></div>
-<main>
-    <WindowManager />
-</main>
-<div class="scroller"></div>
+<section>
+    <div class="scroller"></div>
+    <main>
+        <WindowManager />
+    </main>
+    <div class="scroller"></div>
+</section>
 
 <style>
+    section {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        overflow: auto;
+    }
     .scroller {
-        width: 100%;
+        width: 100vw;
         height: 100vh;
     }
     main {
-        width: 1000px;
+        min-width: 1000px;
         height: 500px;
         margin-top: 200px;
         margin-left: 100px;

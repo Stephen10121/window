@@ -45,8 +45,8 @@
 </script>
 
 <section class="{active?"active":"inactive"}{blurWindowBackground ? " blurBackground" :""}" style="width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};" {id} bind:this={window}>
-    {#each windowDragConfig as dragConfig, index (`windowDragger${id}${index}`)}
-        {#if desktop}
+    {#if desktop}
+        {#each windowDragConfig as dragConfig, index (`windowDragger${id}${index}`)}
             <WindowDragger
                 parentWindow={window}
                 {desktop}
@@ -58,35 +58,39 @@
                 bind:top
                 bind:left
             />
+        {/each}
+        {#if active && resizable}
+            <TopResize
+                id="windowresize{id}top"
+                {mouseContext}
+                {minHeight}
+                {desktop}
+                bind:height
+                bind:top
+            />
+            <RightResize
+                id="windowresize{id}right"
+                parentWindow={window}
+                {mouseContext}
+                {desktop}
+                bind:width
+            />
+            <BottomResize
+                id="windowresize{id}bottom"
+                parentWindow={window}
+                {mouseContext}
+                {desktop}
+                bind:height
+            />
+            <LeftResize
+                id="windowresize{id}left"
+                {mouseContext}
+                {minWidth}
+                {desktop}
+                bind:width
+                bind:left
+            />
         {/if}
-    {/each}
-    {#if active && resizable}
-        <TopResize
-            id="windowresize{id}top"
-            {mouseContext}
-            {minHeight}
-            bind:height
-            bind:top
-        />
-        <RightResize
-            id="windowresize{id}right"
-            parentWindow={window}
-            {mouseContext}
-            bind:width
-        />
-        <BottomResize
-            id="windowresize{id}bottom"
-            parentWindow={window}
-            {mouseContext}
-            bind:height
-        />
-        <LeftResize
-            id="windowresize{id}left"
-            {mouseContext}
-            {minWidth}
-            bind:width
-            bind:left
-        />
     {/if}
     <div class="mainContent">
         <div class="header">
