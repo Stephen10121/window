@@ -2,12 +2,19 @@
     import { onDestroy } from "svelte";
     import type { MouseContext } from "./utils.js";
 
-    export let id: string;
-    export let parentWindow: HTMLElement;
-    export let mouseContext: MouseContext;
-    export let width: string;
+    let {
+        id,
+        parentWindow,
+        mouseContext,
+        width = $bindable()
+    }: {
+       id: string,
+       parentWindow: HTMLElement,
+       mouseContext: MouseContext,
+       width: string 
+    } = $props();
 
-    let offsetX = 0;
+    let offsetX = $state(0);
 
     function mouseIsDown(event: MouseEvent) {
         const parentDimensions = parentWindow?.getBoundingClientRect();
@@ -30,7 +37,7 @@
     });
 </script>
 
-<div on:mousedown={mouseIsDown} role="none" {id}></div>
+<div onmousedown={mouseIsDown} role="none" {id}></div>
 
 <style>
     div {

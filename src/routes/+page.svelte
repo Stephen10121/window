@@ -1,65 +1,22 @@
 <script lang="ts">
-    import Debugger from "$lib/Debugger.svelte";
-    import Window from "$lib/Window.svelte";
     import WindowManager from "$lib/WindowManager.svelte";
-
-    let makeResizable = true;
-    let makeDraggable = true;
-    let doubleClickFullscreen = true;
 </script>
 
-<Debugger>
-    <label>
-        <p>Make it draggable</p>
-        <input type="checkbox" bind:checked={makeDraggable} />
-    </label>
-    <label>
-        <p>Make it resizeable</p>
-        <input type="checkbox" bind:checked={makeResizable} />
-    </label>
-    <label>
-        <p>Double Click for fullscreen</p>
-        <input type="checkbox" bind:checked={doubleClickFullscreen} />
-    </label>
-</Debugger>
-
+<div class="scroller"></div>
 <main>
-    <WindowManager>
-        <!-- <Window {mouseContext} {windowContext} id="win3" top="400px" />
-        <Window {mouseContext} {windowContext} id="win4" top="400px" />
-        <Window {mouseContext} {windowContext} id="win5" top="400px" />
-        <Window {mouseContext} {windowContext} id="win6" top="400px" />
-        <Window {mouseContext} {windowContext} id="win7" top="400px" />
-        <Window {mouseContext} {windowContext} id="win8" top="400px" /> -->
-    </WindowManager>
+    <WindowManager />
 </main>
+<div class="scroller"></div>
 
 <style>
-    :global(*, *::before, *::after) {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-
-    main {
-        width: 100vw;
-        height: 100vh;
-        background-color: #f3f3f3;
-    }
-
-    div {
+    .scroller {
         width: 100%;
-        height: 100%;
-        border-radius: 10px;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        background-color: rgba(133, 77, 255, 0.247);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        height: 100vh;
     }
-
-    h1 {
-        font-family: sans-serif;
-        font-size: 1.25rem;
+    main {
+        width: 1000px;
+        height: 500px;
+        margin-top: 200px;
+        margin-left: 100px;
     }
 </style>

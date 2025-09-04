@@ -2,13 +2,21 @@
     import { onDestroy } from "svelte";
     import type { MouseContext } from "./utils.js";
 
-    export let id: string;
-    export let mouseContext: MouseContext;
-    export let width: string;
-    export let left: string;
-    export let minWidth: number;
+    let {
+        id,
+        mouseContext,
+        width = $bindable(),
+        left = $bindable(),
+        minWidth
+    }: {
+        id: string,
+        mouseContext: MouseContext,
+        width: string,
+        left: string,
+        minWidth: number
+    } = $props();
 
-    let offsetX = 0;
+    let offsetX = $state(0);
 
     function mouseIsDown(event: MouseEvent) {
         const resizerDimensions = document.getElementById(id)?.getBoundingClientRect();
@@ -33,7 +41,7 @@
     });
 </script>
 
-<div on:mousedown={mouseIsDown} role="none" {id}></div>
+<div onmousedown={mouseIsDown} role="none" {id}></div>
 
 <style>
     div {

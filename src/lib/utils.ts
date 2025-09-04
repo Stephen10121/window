@@ -1,3 +1,5 @@
+import type { Snippet } from "svelte";
+
 type VertConfig = { top: string, bottom?: undefined } | { bottom: string, top?: undefined };
 type HorizontalConfig = { left: string, right?: undefined } | { right: string, left?: undefined }
 type SizeConfig = {
@@ -89,4 +91,39 @@ export class WindowContext {
     get currentActiveWindow() {
         return this.activeWindow;
     }
+}
+
+export type ActualWindowProps = {
+    windowDragConfigs: WindowDragConfig[],
+    mouseContext: MouseContext,
+    windowContext: WindowContext,
+    resizable: boolean,
+    height: string,
+    minHeight: number,
+    width: string,
+    minWidth: number,
+    left: string,
+    top: string,
+    icon: string,
+    name: string,
+    id: string,
+    blurWindowBackground: boolean;
+    close: () => unknown,
+    children: Snippet,
+    desktop?: HTMLElement
+}
+
+export const defaultWindowValues = {
+    windowDragConfigs: [],
+    resizable: true,
+    height: "300px",
+    minHeight: 300,
+    width: "300px",
+    minWidth: 300,
+    left: "100px",
+    top: "100px",
+    icon: "defaulticon.svg",
+    name: "Application",
+    blurWindowBackground: true,
+    close: () => {},
 }

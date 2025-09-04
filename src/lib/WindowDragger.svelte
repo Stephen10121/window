@@ -1,34 +1,51 @@
 <script lang="ts">
-    import { createEventDispatcher, onDestroy } from "svelte";
+    import { onDestroy } from "svelte";
     import type { MouseContext, WindowDragConfig } from "./utils.js";
 
-    export let id: string;
-    export let parentWindow: HTMLElement;
-    export let mouseContext: MouseContext;
-    export let dragConfig: WindowDragConfig;
-    export let top: string;
-    export let left: string;
-    export let active: boolean;
+    let {
+        id,
+        parentWindow,
+        desktop,
+        mouseContext,
+        dragConfig,
+        top = $bindable(),
+        left = $bindable(),
+        active,
+        activated
+    }: {
+        id: string,
+        parentWindow: HTMLElement,
+        desktop: HTMLElement,
+        mouseContext: MouseContext,
+        dragConfig: WindowDragConfig,
+        top: string,
+        left: string,
+        active: boolean,
+        activated: () => unknown
+    } = $props();
 
-    const dispatch = createEventDispatcher();
-
-    let offsetX = 0;
-    let offsetY = 0;
+    let offsetX = $state(0);
+    let offsetY = $state(0);
 
     function mouseIsDown(event: MouseEvent) {
         const parentDimensions = parentWindow?.getBoundingClientRect();
+        const desktopDimensions = desktop.getBoundingClientRect();
+
+        console.log(desktopDimensions);
         if (parentDimensions !== undefined) {
-            offsetY = event.clientY - parentDimensions.top;
-            offsetX = event.clientX - parentDimensions.left;
+            offsetY = event.clientY - parentDimensions.top + desktopDimensions.top;
+            offsetX = event.clientX - parentDimensions.left + desktopDimensions.left;
         }
         mouseContext.setActiveMouseTarget(id);
-        if (!active) dispatch("active");
+        if (!active) activated();
     }
 
     const mouseMoveResponderDel = mouseContext.addMouseMoveResponder(id, (event) => {
         const parentDimensions = parentWindow?.getBoundingClientRect();
-        top = (Math.min(document.body.clientHeight - parentDimensions.height, Math.max(0, event.clientY - offsetY))).toString() + "px";
-        left = (Math.min(document.body.clientWidth - parentDimensions.width, Math.max(0, event.clientX - offsetX))).toString() + "px";
+        const desktopDimensions = desktop.getBoundingClientRect();
+        top = (Math.min(desktopDimensions.height - parentDimensions.height, Math.max(0, event.clientY - offsetY))).toString() + "px";
+        left = (Math.min(desktopDimensions.width - parentDimensions.width, Math.max(0, event.clientX - offsetX))).toString() + "px";
+        // left = (Math.min(document.body.clientWidth - parentDimensions.width, Math.max(0, event.clientX - offsetX))).toString() + "px";
     })
 
     onDestroy(() => {
@@ -38,7 +55,7 @@
 
 <div
     style="--drwidth:{dragConfig.width};--drheight:{dragConfig.height};{dragConfig.bottom === undefined ? `top:${dragConfig.top};` : `bottom:${dragConfig.bottom};`}{dragConfig.right === undefined ? `left:${dragConfig.left};` : `right:${dragConfig.right};`}"
-    on:mousedown={mouseIsDown}
+    onmousedown={mouseIsDown}
     role="none"
     {id}
 ></div>

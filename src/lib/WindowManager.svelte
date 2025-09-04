@@ -1,20 +1,20 @@
 <script lang="ts">
-    import type { ComponentProps } from 'svelte';
-    // import { MouseContext, WindowContext } from "./utils";
+    import type { Snippet } from "svelte";
+    import { defaultWindowValues, MouseContext, WindowContext, type ActualWindowProps } from "./utils.js";
     import Window from "./Window.svelte";
-    import { MouseContext, WindowContext } from './utils.js';
-    // import Taskbar from './Taskbar.svelte';
-    // import ProgramIcon from './ProgramIcon.svelte';
 
-    const mouseContext = new MouseContext();
-    const windowContext = new WindowContext();
+    let { children = undefined }: { children?: Snippet<[MouseContext, WindowContext]> } = $props();
+    let parentDesktop: HTMLElement | undefined = $state();
 
-    type WindowProps = Omit<ComponentProps<Window>, 'id' | 'mouseContext' | 'windowContext'>;
+    let mouseContext = new MouseContext();
+    let windowContext = new WindowContext();
 
-    let windows: {[key: string]: { data: string, opts: WindowProps }} = {
-        "win01": { opts: { left: "400px" }, data: "SomeStuff"},
-        "win02": { opts: { top: "400px", left: "400px" }, data: "SomeStuff 2"}
-    };
+    type WindowProps = Omit<ActualWindowProps, 'id' | 'mouseContext' | 'windowContext' | 'close' | 'children'>;
+
+    let windows: {[key: string]: { data: string, opts: WindowProps }} = $state({
+        "win01": { opts: { ...defaultWindowValues, left: "400px" }, data: "SomeStuff"},
+        "win02": { opts: { ...defaultWindowValues, top: "400px", left: "400px" }, data: "SomeStuff 2"}
+    });
 
     function spawnWindow(id: string, option: any, data: string) {
         if (!Object.keys(windows).includes(id)) {
@@ -35,28 +35,26 @@
     on:mouseup={(e) => mouseContext.mouseIsUp(e)}
 />
 
-<section>
+<section bind:this={parentDesktop}>
     <img src="/background-dark.jpg" alt="Windows Background Dark" />
     <div class="rest">
         {#each Object.entries(windows) as [id, windata] (`spawningWindow${id}`)}
             <Window
+                desktop={parentDesktop}
                 {mouseContext}
                 {windowContext}
                 {id}
                 {...windata.opts}
-                on:close={() => closeWindow(id)}
+                close={() => closeWindow(id)}
             >
                 {windata.data}
-                <button on:click={() => spawnWindow("win03test", {top: "20px"}, "Just a test")}>Test</button>
+                <button onclick={() => spawnWindow("win03test", {top: "20px"}, "Just a test")}>Test</button>
             </Window>
         {/each}
-        <slot {mouseContext} {windowContext} />
+        {#if children}
+            {@render children(mouseContext, windowContext)}
+        {/if}
     </div>
-    <!-- <Taskbar>
-        {#each Object.entries(windows) as [id, windata] (`spawningWindow${id}`)}
-            <ProgramIcon {windowContext} {id} icon={windata.opts.icon ? windata.opts.icon : undefined} />
-        {/each}
-    </Taskbar> -->
 </section>
 
 <style>
@@ -68,6 +66,20 @@
         isolation: isolate;
         display: grid;
         grid-template-rows: auto 48px;
+        box-sizing: border-box;
+    }
+    
+    section * {
+        box-sizing: border-box;
+        user-drag: none;
+        -webkit-user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        text-decoration: none;
+        -webkit-touch-callout: none; /* iOS Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
     }
 
     .rest {

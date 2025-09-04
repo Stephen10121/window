@@ -1,35 +1,39 @@
 <script lang="ts">
+    import { onDestroy } from "svelte";
+    import type { ActualWindowProps } from "./utils.js";
     import WindowDragger from "./WindowDragger.svelte";
-    import BottomResize from "./BottomResize.svelte";
-    import RightResize from "./RightResize.svelte";
-    import LeftResize from "./LeftResize.svelte";
     import TopResize from "./TopResize.svelte";
-    import { fade } from 'svelte/transition';
-    import { createEventDispatcher, onDestroy } from "svelte";
-    import type { MouseContext, WindowContext, WindowDragConfig } from "./utils.js";
+    import RightResize from "./RightResize.svelte";
+    import BottomResize from "./BottomResize.svelte";
+    import LeftResize from "./LeftResize.svelte";
+    import { fade } from "svelte/transition";
 
-    const dispatch = createEventDispatcher();
     const FORCEMINWIDTH = 300;
     const FORCEMINHEIGHT = 300;
 
-    export let windowDragConfigs: WindowDragConfig[] = []
-    $: windowDragConfig = [{top: "0", left: "0", width: "calc(100% - 135px)", height: "28px"},...windowDragConfigs];
-    export let mouseContext: MouseContext;
-    export let windowContext: WindowContext;
-    export let resizable = true;
-    export let height = "300px";
-    export let minHeight = 300;
-    export let width = "300px";
-    export let minWidth = 300;
-    export let left = "100px";
-    export let top = "100px";
-    export let icon = "/defaulticon.svg";
-    export let name = "Application";
-    export let id: string;
-    export let blurWindowBackground = true;
+    let {
+        windowDragConfigs = [],
+        mouseContext,
+        windowContext,
+        resizable = true,
+        height = "300px",
+        minHeight = 300,
+        width = "300px",
+        minWidth = 300,
+        left = "100px",
+        top = "100px",
+        icon = "defaulticon.svg",
+        name = "Application",
+        id,
+        blurWindowBackground = true,
+        close,
+        children,
+        desktop
+    }: ActualWindowProps = $props();
 
-    let window: HTMLElement;
-    let active = false;
+    let windowDragConfig = $derived([{top: "0", left: "0", width: "calc(100% - 135px)", height: "28px"}, ...windowDragConfigs]);
+    let window: HTMLElement | undefined = $state();
+    let active = $state(false);
 
     const unsubscribeWindow = windowContext.registerWindow(id, (winId) => {
         active = id == winId;
@@ -42,16 +46,19 @@
 
 <section class="{active?"active":"inactive"}{blurWindowBackground ? " blurBackground" :""}" style="width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};" {id} bind:this={window}>
     {#each windowDragConfig as dragConfig, index (`windowDragger${id}${index}`)}
-        <WindowDragger
-            parentWindow={window}
-            id="windowDragger{id}{index}"
-            {mouseContext}
-            {dragConfig}
-            {active}
-            on:active={() => windowContext.setActiveWindow(id)}
-            bind:top
-            bind:left
-        />
+        {#if desktop}
+            <WindowDragger
+                parentWindow={window}
+                {desktop}
+                id="windowDragger{id}{index}"
+                {mouseContext}
+                {dragConfig}
+                {active}
+                activated={() => windowContext.setActiveWindow(id)}
+                bind:top
+                bind:left
+            />
+        {/if}
     {/each}
     {#if active && resizable}
         <TopResize
@@ -88,23 +95,26 @@
                 <p>{name}</p>
             </div>
             <div class="closebuttons">
-            <button class="minimize"><div class="dash" /></button>
+            <!-- svelte-ignore a11y_consider_explicit_label -->
+            <button class="minimize"><div class="dash"></div></button>
             <button class="resize">
                 {#if active}
-                    <div in:fade={{duration:250}} class="minimize-box" />
+                    <div in:fade={{duration:250}} class="minimize-box"></div>
                 {:else}
                     <div in:fade={{duration:250}} class="box"></div>
                 {/if}
             </button>
-            <button class="close" on:click={() => dispatch("close")}><img src="x.svg" alt="Close" /></button>
+            <button class="close" onclick={() => close()}><img src="x.svg" alt="Close" /></button>
             </div>
         </div>
         <div class="rest">
-            <slot />
+            {#if children}
+                {@render children()}
+            {/if}
         </div>
     </div>
     {#if !active}
-        <div class="cover" on:mousedown={() => windowContext.setActiveWindow(id)} role="none"></div>
+        <div class="cover" onmousedown={() => windowContext.setActiveWindow(id)} role="none"></div>
     {/if}
 </section>
 
