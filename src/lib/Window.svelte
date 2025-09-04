@@ -34,9 +34,11 @@
     let windowDragConfig = $derived([{top: "0", left: "0", width: "calc(100% - 135px)", height: "28px"}, ...windowDragConfigs]);
     let window: HTMLElement | undefined = $state();
     let active = $state(false);
+    let stackOrder = $state(1);
 
-    const unsubscribeWindow = windowContext.registerWindow(id, (winId) => {
+    const unsubscribeWindow = windowContext.registerWindow(id, (winId, winOrder) => {
         active = id == winId;
+        stackOrder = winOrder.indexOf(id) * 10;
     });
 
     onDestroy(() => {
@@ -44,7 +46,7 @@
     });
 </script>
 
-<section class="{active?"active":"inactive"}{blurWindowBackground ? " blurBackground" :""}" style="width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};" {id} bind:this={window}>
+<section class="{active?"active":"inactive"}{blurWindowBackground ? " blurBackground" :""}" style="--stackOrder:{stackOrder};width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};" {id} bind:this={window}>
     {#if desktop}
         {#each windowDragConfig as dragConfig, index (`windowDragger${id}${index}`)}
             <WindowDragger
@@ -113,7 +115,7 @@
         </div>
         <div class="rest">
             {#if children}
-                {@render children()}
+                {@render children()}{stackOrder}
             {/if}
         </div>
     </div>
@@ -126,11 +128,12 @@
     section {
         position: absolute;
         isolation: isolate;
+        z-index: var(--stackOrder);
     }
 
-    section.active {
-        z-index: 10;
-    }
+    /* section.active {
+        z-index: var(--stackOrder);
+    } */
 
     section.active.blurBackground {
         backdrop-filter: blur(16px);
@@ -140,7 +143,7 @@
     }
 
     section.inactive {
-        z-index: 8;
+        /* z-index: 8; */
         background-color: #1a1a1a;
     }
 

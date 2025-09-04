@@ -42,46 +42,80 @@ export class MouseContext {
 
 export class WindowContext {
     activeWindow = "";
-    prevActiveWindow = "";
-    registeredWindows: {[key: string]: (windId: string) => unknown} = {}
-    activeWindowSubscribers: {[key: string]: (windId: string) => unknown} = {}
+    orderOfActiveWindows: string[] = [];
+    registeredWindows: {[key: string]: (windId: string, winStackOrder: string[]) => unknown} = {}
+    // If anything thats not a window wants to know what the current active window is, they can subscript to activeWindowsSubscribers
+    activeWindowSubscribers: {[key: string]: (windId: string, winStackOrder: string[]) => unknown} = {}
 
     constructor() {
         this.activeWindow = "";
         this.registeredWindows = {};
-        this.prevActiveWindow = "";
         this.activeWindowSubscribers = {};
     }
 
     setActiveWindow(winId: string) {
-        this.prevActiveWindow = this.activeWindow;
+        if (this.orderOfActiveWindows.includes(winId)) {
+            let newActiveWinOrder: string[] = [];
+            for (let i=0;i<this.orderOfActiveWindows.length;i++) {
+                if (this.orderOfActiveWindows[i] !== winId) {
+                    newActiveWinOrder.push(this.orderOfActiveWindows[i]);
+                }
+            }
+            newActiveWinOrder.push(winId);
+            this.orderOfActiveWindows = newActiveWinOrder;
+        } else {
+            this.orderOfActiveWindows.push(winId);
+        }
+
         this.activeWindow = winId;
 
         for (const [_id, activeWindowCallback] of Object.entries(this.registeredWindows)) {
-            activeWindowCallback(winId);
+            activeWindowCallback(winId, this.orderOfActiveWindows);
         }
 
         for (const [_id, callback] of Object.entries(this.activeWindowSubscribers)) {
-            callback(winId);
+            callback(winId, this.orderOfActiveWindows);
         }
     }
 
-    registerWindow(id:string, activeWindowCallback: (winId: string) => unknown) {
-        this.registeredWindows[id] = activeWindowCallback;
-        this.setActiveWindow(id);
+    deleteWindow(id: string) {
+        delete this.registeredWindows[id];
 
-        return () => {
-            delete this.registeredWindows[id];
-            if (this.activeWindow === id && this.prevActiveWindow.length !== 0) {
-                this.setActiveWindow(this.prevActiveWindow);
+        if (this.orderOfActiveWindows.includes(id)) {
+            let newActiveWinOrder: string[] = [];
+            for (let i=0;i<this.orderOfActiveWindows.length;i++) {
+                if (this.orderOfActiveWindows[i] !== id) {
+                    newActiveWinOrder.push(this.orderOfActiveWindows[i]);
+                }
+            }
+            this.orderOfActiveWindows = newActiveWinOrder;
+        }
+
+        if (this.orderOfActiveWindows.length > 0) {
+            this.activeWindow = this.orderOfActiveWindows[this.orderOfActiveWindows.length - 1]
+            for (const [_id, activeWindowCallback] of Object.entries(this.registeredWindows)) {
+                activeWindowCallback(this.activeWindow, this.orderOfActiveWindows);
+            }
+    
+            for (const [_id, callback] of Object.entries(this.activeWindowSubscribers)) {
+                callback(this.activeWindow, this.orderOfActiveWindows);
             }
         }
     }
 
-    subscribeActiveWindow(callBack: (windId: string) => unknown) {
+    registerWindow(id:string, activeWindowCallback: (winId: string, winStackOrder: string[]) => unknown) {
+        this.registeredWindows[id] = activeWindowCallback;
+        this.setActiveWindow(id);
+
+        return () => {
+            this.deleteWindow(id);
+        }
+    }
+
+    subscribeActiveWindow(callBack: (windId: string, winStackOrder: string[]) => unknown) {
         const randomId = crypto.randomUUID();
         this.activeWindowSubscribers[randomId] = callBack;
-        callBack(this.activeWindow);
+        callBack(this.activeWindow, this.orderOfActiveWindows);
 
         return () => {
             delete this.activeWindowSubscribers[randomId];
