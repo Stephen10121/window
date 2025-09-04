@@ -163,6 +163,7 @@ export type ActualWindowProps = {
     top?: string,
     id: string,
     blurWindowBackground?: boolean,
+    inactiveColor?: string,
     children?: Snippet,
 }
 

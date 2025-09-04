@@ -20,17 +20,18 @@
         minWidth = 300,
         left = "100px",
         top = "100px",
+        inactiveColor = "#1a1a1aa1",
         id,
         blurWindowBackground = true,
         children,
     }: ActualWindowProps = $props();
 
-    let windowDragConfig = $derived([{top: "0", left: "0", width: "calc(100% - 135px)", height: "28px"}, ...windowDragConfigs]);
+    // let windowDragConfig = $derived([{top: "0", left: "0", width: "calc(100% - 135px)", height: "28px"}, ...windowDragConfigs]);
     let window: HTMLElement | undefined = $state();
     let active = $state(false);
     let somethingMoving = $state(false);
     let stackOrder = $state(1);
-    let ids = $derived([`windowresize${id}left`, `windowresize${id}bottom`, `windowresize${id}right`, `windowresize${id}top`, ...windowDragConfig.map((_, index) => `windowDragger${id}${index}`)]);
+    let ids = $derived([`windowresize${id}left`, `windowresize${id}bottom`, `windowresize${id}right`, `windowresize${id}top`, ...windowDragConfigs.map((_, index) => `windowDragger${id}${index}`)]);
 
     const unsubscribeWindow = context.windowContext.registerWindow(id, (winId, winOrder) => {
         active = id == winId;
@@ -39,8 +40,6 @@
 
     const unsubscribeMouseListener = context.mouseContext.subscribeActiveMouseSubscribers((activeMouseListener) => {
         somethingMoving = ids.includes(activeMouseListener);
-
-        console.log(ids.includes(activeMouseListener) ? `${id} is active` : "");
     });
 
     onDestroy(() => {
@@ -49,10 +48,10 @@
     });
 </script>
 
-<section class="{active?"active":"inactive"}{blurWindowBackground ? " blurBackground" :""}" style="--stackOrder:{stackOrder};width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};" {id} bind:this={window}>
+<section class="{active?"active":"inactive"}{blurWindowBackground ? " blurBackground" :""}" style="--inactiveColor:{inactiveColor};--stackOrder:{stackOrder};width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};" {id} bind:this={window}>
     {#if context.desktop}
         <div class="draggers">
-            {#each windowDragConfig as dragConfig, index (`windowDragger${id}${index}`)}
+            {#each windowDragConfigs as dragConfig, index (`windowDragger${id}${index}`)}
                 <WindowDragger
                     parentWindow={window}
                     desktop={context.desktop}
@@ -143,7 +142,7 @@
     }
 
     section.inactive {
-        background-color: #1a1a1aa1;
+        background-color: var(--inactiveColor);
     }
 
     .cover {
@@ -153,7 +152,7 @@
         top: 0;
         left: 0;
         z-index: 100;
-        background-color: #1a1a1aa1;
+        background-color: var(--inactiveColor);
     }
 
     .covermoving {
