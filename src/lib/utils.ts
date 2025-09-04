@@ -94,22 +94,22 @@ export class WindowContext {
 }
 
 export type ActualWindowProps = {
-    windowDragConfigs: WindowDragConfig[],
+    windowDragConfigs?: WindowDragConfig[],
     mouseContext: MouseContext,
     windowContext: WindowContext,
-    resizable: boolean,
-    height: string,
-    minHeight: number,
-    width: string,
-    minWidth: number,
-    left: string,
-    top: string,
-    icon: string,
-    name: string,
+    resizable?: boolean,
+    height?: string,
+    minHeight?: number,
+    width?: string,
+    minWidth?: number,
+    left?: string,
+    top?: string,
+    icon?: string,
+    name?: string,
     id: string,
-    blurWindowBackground: boolean;
+    blurWindowBackground?: boolean;
     close: () => unknown,
-    children: Snippet,
+    children?: Snippet,
     desktop?: HTMLElement
 }
 

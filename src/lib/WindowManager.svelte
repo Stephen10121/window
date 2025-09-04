@@ -3,11 +3,19 @@
     import { defaultWindowValues, MouseContext, WindowContext, type ActualWindowProps } from "./utils.js";
     import Window from "./Window.svelte";
 
-    let { children = undefined }: { children?: Snippet<[MouseContext, WindowContext]> } = $props();
-    let parentDesktop: HTMLElement | undefined = $state();
+    type CloseWindow = (id: string) => unknown;
+    type ParentDesktop = HTMLElement | undefined;
 
-    let mouseContext = new MouseContext();
-    let windowContext = new WindowContext();
+    let {
+        children = undefined,
+        mouseContext = new MouseContext(),
+        windowContext = new WindowContext()
+    }: { 
+        children?: Snippet<[MouseContext, WindowContext, CloseWindow, ParentDesktop]>,
+        mouseContext?: MouseContext,
+        windowContext?: WindowContext,
+    } = $props();
+    let parentDesktop: ParentDesktop = $state();
 
     type WindowProps = Omit<ActualWindowProps, 'id' | 'mouseContext' | 'windowContext' | 'close' | 'children'>;
 
@@ -25,6 +33,7 @@
     }
 
     function closeWindow(id: string) {
+        console.log(id);
         delete windows[id];
         windows = windows;
     }
@@ -52,7 +61,7 @@
             </Window>
         {/each}
         {#if children}
-            {@render children(mouseContext, windowContext)}
+            {@render children(mouseContext, windowContext, closeWindow, parentDesktop)}
         {/if}
     </div>
 </section>

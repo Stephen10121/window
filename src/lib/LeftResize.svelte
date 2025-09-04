@@ -33,11 +33,14 @@
         
         const prevLeft = parseInt(left.slice(0, -2));
         const newLeft = event.clientX + offsetX - desktopDims.left;
-        const widthNum = parseInt(width.slice(0, -2))
-        if (prevLeft - newLeft + widthNum >=  minWidth && newLeft > 0) {
-            left = newLeft.toString() + "px";
+        const widthNum = parseInt(width.slice(0, -2));
+        // console.log(Math.abs(Math.max(minWidth, prevLeft - Math.max(newLeft, 0) + widthNum) - widthNum - parseInt(left.slice(0, -2))))
+        left = Math.abs(Math.max(minWidth, prevLeft - Math.max(newLeft, 0) + widthNum) - widthNum - parseInt(left.slice(0, -2))).toString() + "px";
+        // left = (prevLeft + Math.max(minWidth, prevLeft - Math.max(newLeft, 0) + widthNum) - widthNum).toString() +"px";
+        // left = widthNum <= minWidth ? left : Math.max(newLeft, 0).toString() + "px";
+        // if (prevLeft - newLeft + widthNum >=  minWidth && newLeft > 0) {
             width = Math.max(minWidth, prevLeft - Math.max(newLeft, 0) + widthNum).toString() + "px";
-        }
+        // }
     })
 
     onDestroy(() => {

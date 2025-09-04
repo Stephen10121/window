@@ -32,7 +32,7 @@
 
     const mouseMoveResponderDel = mouseContext.addMouseMoveResponder(id, (event) => {
         const desktopDimension = desktop.getBoundingClientRect();
-        if(event.clientY < document.body.clientHeight) height = (Math.min(event.clientY, desktopDimension.height + desktopDimension.top) - offsetY).toString() + "px"
+        height = (Math.min(event.clientY, desktopDimension.height + desktopDimension.top) - offsetY).toString() + "px";
     })
 
     onDestroy(() => {
