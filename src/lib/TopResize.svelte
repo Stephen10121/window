@@ -37,10 +37,6 @@
 
         top = Math.abs(Math.max(minHeight, prevTop - Math.max(newTop, 0) + heightNum) - heightNum - parseInt(top.slice(0, -2))).toString() + "px";
         height = Math.max(minHeight, prevTop - Math.max(newTop, 0) + heightNum).toString() + "px";
-        // if (prevTop - newTop + heightNum >=  minHeight && newTop > 0) {
-        //     top = (newTop).toString() + "px";
-        //     height = Math.max(minHeight, prevTop - Math.max(newTop, 0) + heightNum).toString() + "px";
-        // }
     })
 
     onDestroy(() => {
