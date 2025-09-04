@@ -6,16 +6,30 @@ type SizeConfig = {
     width: string
     height: string
 }
+type OptColorConfig = {
+    color?: string
+}
 
-export type WindowDragConfig = VertConfig & HorizontalConfig & SizeConfig
+export type WindowDragConfig = VertConfig & HorizontalConfig & SizeConfig & OptColorConfig
 
 export class MouseContext {
     #activeMouseTarget = "";
     mouseMoveResponders: {[key: string]: (event: MouseEvent) => unknown} = {}
+    activeMouseSubscribers: {[key: string]: (activeId: string) => unknown} = {}
 
     constructor() {
         this.#activeMouseTarget = "";
         this.mouseMoveResponders = {}
+        this.activeMouseSubscribers = {}
+    }
+
+    subscribeActiveMouseSubscribers(callBack: (activeId: string) => unknown) {
+        const randomId = crypto.randomUUID();
+        this.activeMouseSubscribers[randomId] = callBack;
+
+        return () => {
+            delete this.activeMouseSubscribers[randomId];
+        }
     }
 
     addMouseMoveResponder(id: string, callbackFunc: (event: MouseEvent) => unknown) {
@@ -33,10 +47,16 @@ export class MouseContext {
     mouseIsUp(_event: MouseEvent) {
         this.#activeMouseTarget = "";
         // if (this.#activeMouseTarget && this.#activeMouseTarget.length > 0) this.mouseUpResponders[this.#activeMouseTarget](event);
+        for (const [_id, callback] of Object.entries(this.activeMouseSubscribers)) {
+            callback("adawdawdklawdlawdmawldmawlkdmldm8321093289038i");
+        }
     }
 
     setActiveMouseTarget(id: string) {
         this.#activeMouseTarget = id;
+        for (const [_id, callback] of Object.entries(this.activeMouseSubscribers)) {
+            callback(id);
+        }
     }
 }
 
@@ -129,8 +149,11 @@ export class WindowContext {
 
 export type ActualWindowProps = {
     windowDragConfigs?: WindowDragConfig[],
-    mouseContext: MouseContext,
-    windowContext: WindowContext,
+    context: {
+        desktop?: HTMLElement
+        mouseContext: MouseContext,
+        windowContext: WindowContext,
+    },
     resizable?: boolean,
     height?: string,
     minHeight?: number,
@@ -138,13 +161,9 @@ export type ActualWindowProps = {
     minWidth?: number,
     left?: string,
     top?: string,
-    icon?: string,
-    name?: string,
     id: string,
-    blurWindowBackground?: boolean;
-    close: () => unknown,
+    blurWindowBackground?: boolean,
     children?: Snippet,
-    desktop?: HTMLElement
 }
 
 export const defaultWindowValues = {

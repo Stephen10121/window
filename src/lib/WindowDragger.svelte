@@ -53,7 +53,7 @@
 </script>
 
 <div
-    style="--drwidth:{dragConfig.width};--drheight:{dragConfig.height};{dragConfig.bottom === undefined ? `top:${dragConfig.top};` : `bottom:${dragConfig.bottom};`}{dragConfig.right === undefined ? `left:${dragConfig.left};` : `right:${dragConfig.right};`}"
+    style="{dragConfig.color ? `background-color:${dragConfig.color};` : ""}--drwidth:{dragConfig.width};--drheight:{dragConfig.height};{dragConfig.bottom === undefined ? `top:${dragConfig.top};` : `bottom:${dragConfig.bottom};`}{dragConfig.right === undefined ? `left:${dragConfig.left};` : `right:${dragConfig.right};`}"
     onmousedown={mouseIsDown}
     role="none"
     {id}
@@ -66,5 +66,6 @@
         position: absolute;
         cursor: grab;
         z-index: 200;
+        pointer-events: all;
     }
 </style>

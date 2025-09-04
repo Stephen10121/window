@@ -11,13 +11,13 @@
         mouseContext = new MouseContext(),
         windowContext = new WindowContext()
     }: { 
-        children?: Snippet<[MouseContext, WindowContext, CloseWindow, ParentDesktop]>,
+        children?: Snippet<[{mouseContext: MouseContext, windowContext: WindowContext, desktop: ParentDesktop}, CloseWindow]>,
         mouseContext?: MouseContext,
         windowContext?: WindowContext,
     } = $props();
     let parentDesktop: ParentDesktop = $state();
 
-    type WindowProps = Omit<ActualWindowProps, 'id' | 'mouseContext' | 'windowContext' | 'close' | 'children'>;
+    type WindowProps = Omit<ActualWindowProps, 'id' | 'context' | 'close' | 'children'>;
 
     let windows: {[key: string]: { data: string, opts: WindowProps }} = $state({
         "win01": { opts: { ...defaultWindowValues, left: "400px" }, data: "SomeStuff"},
@@ -49,19 +49,16 @@
     <div class="rest">
         {#each Object.entries(windows) as [id, windata] (`spawningWindow${id}`)}
             <Window
-                desktop={parentDesktop}
-                {mouseContext}
-                {windowContext}
+                context={{desktop: parentDesktop, mouseContext, windowContext}}
                 {id}
                 {...windata.opts}
-                close={() => closeWindow(id)}
             >
                 {windata.data}
                 <button onclick={() => spawnWindow("win03test", {top: "20px"}, "Just a test")}>Test</button>
             </Window>
         {/each}
         {#if children}
-            {@render children(mouseContext, windowContext, closeWindow, parentDesktop)}
+            {@render children({ mouseContext, windowContext, desktop: parentDesktop }, closeWindow)}
         {/if}
     </div>
 </section>
