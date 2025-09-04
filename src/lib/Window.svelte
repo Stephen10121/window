@@ -11,7 +11,7 @@
     const FORCEMINHEIGHT = 300;
 
     let {
-        windowDragConfigs = [],
+        windowDragRegions = [],
         context,
         resizable = true,
         height = "300px",
@@ -31,7 +31,7 @@
     let active = $state(false);
     let somethingMoving = $state(false);
     let stackOrder = $state(1);
-    let ids = $derived([`windowresize${id}left`, `windowresize${id}bottom`, `windowresize${id}right`, `windowresize${id}top`, ...windowDragConfigs.map((_, index) => `windowDragger${id}${index}`)]);
+    let ids = $derived([`windowresize${id}left`, `windowresize${id}bottom`, `windowresize${id}right`, `windowresize${id}top`, ...windowDragRegions.map((_, index) => `windowDragger${id}${index}`)]);
 
     const unsubscribeWindow = context.windowContext.registerWindow(id, (winId, winOrder) => {
         active = id == winId;
@@ -51,7 +51,7 @@
 <section class="{active?"active":"inactive"}{blurWindowBackground ? " blurBackground" :""}" style="--inactiveColor:{inactiveColor};--stackOrder:{stackOrder};width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};" {id} bind:this={window}>
     {#if context.desktop}
         <div class="draggers">
-            {#each windowDragConfigs as dragConfig, index (`windowDragger${id}${index}`)}
+            {#each windowDragRegions as dragConfig, index (`windowDragger${id}${index}`)}
                 <WindowDragger
                     parentWindow={window}
                     desktop={context.desktop}

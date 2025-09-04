@@ -1,6 +1,8 @@
 // Reexport your entry components here
-export { default as WindowManager } from "./WindowManager.svelte";
-export { default as Window } from "./Window.svelte";
+import { default as WindowManager } from "./WindowManager.svelte";
+import { default as Window } from "./Window.svelte";
 
-export type { WindowDragConfig, ActualWindowProps } from "./utils.js";
-export { MouseContext, WindowContext, defaultWindowValues } from "./utils.js";
+import type { WindowDragConfig, ActualWindowProps } from "./utils.js";
+import { MouseContext, WindowContext, defaultWindowValues } from "./utils.js";
+
+export { WindowManager, Window, type WindowDragConfig, type ActualWindowProps, MouseContext, WindowContext, defaultWindowValues }

@@ -14,7 +14,7 @@
                 top="0px"
                 left="0px"
                 resizable
-                windowDragConfigs={[
+                windowDragRegions={[
                     {width:"10%",height:"10%",top:"0px",left:"0px", color:"#ff000033"},
                     {width:"10%",height:"10%",bottom:"0px",left:"0px", color:"blue"},
                     {width:"10%",height:"10%",top:"0px",right:"0px", color:"green"},
@@ -31,7 +31,7 @@
                     {context}
                     top="0px"
                     left="300px"
-                    windowDragConfigs={[
+                    windowDragRegions={[
                         {width:"10%",height:"10%",top:"0px",left:"0px", color:"#ff000033"},
                         {width:"10%",height:"10%",bottom:"0px",left:"0px", color:"blue"},
                         {width:"10%",height:"10%",top:"0px",right:"0px", color:"green"},
@@ -48,7 +48,7 @@
                 {context}
                 top="0px"
                 left="300px"
-                windowDragConfigs={[]}
+                windowDragRegions={[]}
                 resizable
             >
                 <iframe src="https://challenge.clarkstudents.com" frameborder="0" style="width: 100%;height:100%"></iframe>

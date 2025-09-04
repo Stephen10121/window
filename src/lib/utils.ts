@@ -148,7 +148,7 @@ export class WindowContext {
 }
 
 export type ActualWindowProps = {
-    windowDragConfigs?: WindowDragConfig[],
+    windowDragRegions?: WindowDragConfig[],
     context: {
         desktop?: HTMLElement
         mouseContext: MouseContext,
