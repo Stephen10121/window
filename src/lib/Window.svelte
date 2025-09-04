@@ -26,7 +26,6 @@
         children,
     }: ActualWindowProps = $props();
 
-    // let windowDragConfig = $derived([{top: "0", left: "0", width: "calc(100% - 135px)", height: "28px"}, ...windowDragConfigs]);
     let window: HTMLElement | undefined = $state();
     let active = $state(false);
     let somethingMoving = $state(false);
@@ -100,7 +99,7 @@
     {/if}
     <div class="rest">
         {#if children}
-            {@render children()}{stackOrder}
+            {@render children()}
         {/if}
     </div>
     {#if !active}

@@ -1,9 +1,7 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
-    import { defaultWindowValues, MouseContext, WindowContext, type ActualWindowProps } from "./utils.js";
-    import Window from "./Window.svelte";
+    import { MouseContext, WindowContext } from "./utils.js";
 
-    type CloseWindow = (id: string) => unknown;
     type ParentDesktop = HTMLElement | undefined;
 
     let {
@@ -11,32 +9,12 @@
         mouseContext = new MouseContext(),
         windowContext = new WindowContext()
     }: { 
-        children?: Snippet<[{mouseContext: MouseContext, windowContext: WindowContext, desktop: ParentDesktop}, CloseWindow]>,
+        children?: Snippet<[{mouseContext: MouseContext, windowContext: WindowContext, desktop: ParentDesktop}]>,
         mouseContext?: MouseContext,
         windowContext?: WindowContext,
     } = $props();
     let parentDesktop: ParentDesktop = $state();
 
-    type WindowProps = Omit<ActualWindowProps, 'id' | 'context' | 'close' | 'children'>;
-
-    let windows: {[key: string]: { data: string, opts: WindowProps }} = $state({
-        "win01": { opts: { ...defaultWindowValues, left: "400px" }, data: "SomeStuff"},
-        "win02": { opts: { ...defaultWindowValues, top: "400px", left: "400px" }, data: "SomeStuff 2"}
-    });
-
-    function spawnWindow(id: string, option: any, data: string) {
-        if (!Object.keys(windows).includes(id)) {
-            windows[id] = { opts: option, data };
-        } else {
-            console.log("Window with this id already exists.");
-        }
-    }
-
-    function closeWindow(id: string) {
-        console.log(id);
-        delete windows[id];
-        windows = windows;
-    }
 </script>
 
 <svelte:window 
@@ -45,20 +23,9 @@
 />
 
 <section bind:this={parentDesktop}>
-    <img src="/background-dark.jpg" alt="Windows Background Dark" />
     <div class="rest">
-        {#each Object.entries(windows) as [id, windata] (`spawningWindow${id}`)}
-            <Window
-                context={{desktop: parentDesktop, mouseContext, windowContext}}
-                {id}
-                {...windata.opts}
-            >
-                {windata.data}
-                <button onclick={() => spawnWindow("win03test", {top: "20px"}, "Just a test")}>Test</button>
-            </Window>
-        {/each}
         {#if children}
-            {@render children({ mouseContext, windowContext, desktop: parentDesktop }, closeWindow)}
+            {@render children({ mouseContext, windowContext, desktop: parentDesktop })}
         {/if}
     </div>
 </section>
@@ -91,13 +58,5 @@
     .rest {
         width: 100%;
         height: 100%;
-    }
-
-    img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        min-width: 100%;
-        max-height: 100%;
     }
 </style>
