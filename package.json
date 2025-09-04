@@ -1,8 +1,14 @@
 {
 	"name": "svelte-windows",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "A draggable and resizable window manager that works seamlessly in you projects. Works in scroll areas, overflow situations. Includes window stacking based on how recently it was active.",
 	"license": "MIT",
+	"author": {
+		"name": "Stephen Gruzin",
+		"email": "me@stephengruzin.dev",
+		"url": "https://github.com/Stephen10121/"
+	},
+	"homepage": "https://github.com/Stephen10121/window",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",
