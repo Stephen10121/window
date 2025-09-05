@@ -14,15 +14,15 @@
         windowDragRegions = [],
         context,
         resizable = true,
-        height = "300px",
+        height = $bindable("300px"),
         minHeight = 300,
-        width = "300px",
+        width = $bindable("300px"),
         minWidth = 300,
-        left = "100px",
-        top = "100px",
+        left = $bindable("100px"),
+        top = $bindable("100px"),
         inactiveColor = "#1a1a1aa1",
-        id,
         blurWindowBackground = true,
+        id,
         children,
     }: ActualWindowProps = $props();
 
@@ -152,6 +152,7 @@
         left: 0;
         z-index: 100;
         background-color: var(--inactiveColor);
+        border-radius: var(--winRadius);
     }
 
     .covermoving {

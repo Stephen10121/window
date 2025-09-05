@@ -3,6 +3,11 @@
     import WindowManager from "$lib/WindowManager.svelte";
 
     let showPersonalWebsite = $state(true);
+
+    let personalWebsiteTop = $state("0x");
+    let personalWebsiteLeft = $state("300px");
+    let personalWebsiteWidth = $state("300px");
+    let personalWebsiteHeight = $state("300px");
 </script>
 
 <main>
@@ -29,8 +34,10 @@
                 <Window
                     id="win04"
                     {context}
-                    top="0px"
-                    left="300px"
+                    bind:top={personalWebsiteTop}
+                    bind:left={personalWebsiteLeft}
+                    bind:height={personalWebsiteHeight}
+                    bind:width={personalWebsiteWidth}
                     windowDragRegions={[
                         {width:"10%",height:"10%",top:"0px",left:"0px", color:"#ff000033"},
                         {width:"10%",height:"10%",bottom:"0px",left:"0px", color:"blue"},

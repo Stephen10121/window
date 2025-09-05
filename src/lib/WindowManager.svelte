@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
-    import { MouseContext, WindowContext } from "./utils.js";
+    import { MouseContext, WindowContext, type ActualWindowProps } from "./utils.js";
 
     type ParentDesktop = HTMLElement | undefined;
 
@@ -9,7 +9,7 @@
         mouseContext = new MouseContext(),
         windowContext = new WindowContext()
     }: { 
-        children?: Snippet<[{mouseContext: MouseContext, windowContext: WindowContext, desktop: ParentDesktop}]>,
+        children?: Snippet<[ActualWindowProps["context"]]>,
         mouseContext?: MouseContext,
         windowContext?: WindowContext,
     } = $props();
