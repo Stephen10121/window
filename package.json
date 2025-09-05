@@ -1,6 +1,6 @@
 {
 	"name": "svelte-windows",
-	"version": "0.0.9",
+	"version": "0.1.0",
 	"description": "A draggable and resizable window manager that works seamlessly in you projects. Works in scroll areas, overflow situations. Includes window stacking based on how recently it was active.",
 	"license": "MIT",
 	"author": {

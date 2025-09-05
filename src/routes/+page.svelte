@@ -22,6 +22,7 @@
                 windowDragRegions={[
                     {width:"100%",height:"20px",top:"0px",left:"0px"}
                 ]}
+                onActiveStateChanged={(isActive) => {console.log({isActive})}}
             >
                 Personal Website Monitor
                 <br>
@@ -46,7 +47,6 @@
                         {width:"10%",height:"10%",bottom:"0px",right:"0px", color:"orange"}
                     ]}
                     resizable
-                    inactiveColor="none"
                 >
                     <iframe title="Personal Website" src="https://stephengruzin.dev" frameborder="0" style="width: 100%;height:100%"></iframe>
                 </Window>

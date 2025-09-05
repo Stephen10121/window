@@ -286,27 +286,15 @@ export type ActualWindowProps = {
      * "senfjkenfsjkenfseffsefsefsef" is a reserved id. DO NOT use this id.
      */
     id: string,
-    /**
-     * This sets a frosty effect for the window background.
-     * @default true
-     * 
-     * You can disable it for some performance gains.
-     */
-    blurWindowBackground?: boolean,
-    /**
-     * Whenever a window is not active, you can set a color to overlay on that window or no color at all. Transparent colors are valid.
-     * 
-     * @example
-     * ```ts
-     * inactiveColor: "red"
-     * 
-     * inactiveColor: "none",
-     * 
-     * inactiveColor: "#dfdfdfaa"
-     * ```
-     * 
-     * @default #1a1a1aa1
-     */
-    inactiveColor?: string,
     children?: Snippet,
+    /**
+     * This function is called if the window active state changes. You can see if the window is active with the isActive boolean.
+     * @param isActive
+     * @returns
+     */
+    onActiveStateChanged?: (isActive: boolean) => unknown
+    /**
+     * This just adds a border to the window to see where it is. Set to true by default
+     */
+    basicStyling?: boolean
 }
