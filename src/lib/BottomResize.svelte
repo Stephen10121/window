@@ -50,5 +50,6 @@
         bottom: -5px;
         right: 0;
         cursor: s-resize;
+        pointer-events: all;
     }
 </style>

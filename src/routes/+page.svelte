@@ -47,10 +47,10 @@
                     resizable
                     inactiveColor="none"
                 >
-                    <iframe src="https://stephengruzin.dev" frameborder="0" style="width: 100%;height:100%"></iframe>
+                    <iframe title="Personal Website" src="https://stephengruzin.dev" frameborder="0" style="width: 100%;height:100%"></iframe>
                 </Window>
             {/if}
-            <Window
+            <!-- <Window
                 id="googlewin"
                 {context}
                 top="0px"
@@ -59,7 +59,7 @@
                 resizable
             >
                 <iframe src="https://challenge.clarkstudents.com" frameborder="0" style="width: 100%;height:100%"></iframe>
-            </Window>
+            </Window> -->
         {/snippet}
     </WindowManager>
 </main>

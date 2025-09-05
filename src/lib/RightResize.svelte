@@ -51,5 +51,6 @@
         top: 0;
         right: -5px;
         cursor: e-resize;
+        pointer-events: all;
     }
 </style>

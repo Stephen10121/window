@@ -30,7 +30,6 @@
     let active = $state(false);
     let somethingMoving = $state(false);
     let stackOrder = $state(1);
-    let ids = $derived([`windowresize${id}left`, `windowresize${id}bottom`, `windowresize${id}right`, `windowresize${id}top`, ...windowDragRegions.map((_, index) => `windowDragger${id}${index}`)]);
 
     const unsubscribeWindow = context.windowContext.registerWindow(id, (winId, winOrder) => {
         active = id == winId;
@@ -38,7 +37,7 @@
     });
 
     const unsubscribeMouseListener = context.mouseContext.subscribeActiveMouseSubscribers((activeMouseListener) => {
-        somethingMoving = ids.includes(activeMouseListener);
+        somethingMoving = activeMouseListener !== "adawdawdklawdlawdmawldmawlkdmldm8321093289038i";
     });
 
     onDestroy(() => {
@@ -153,6 +152,7 @@
         z-index: 100;
         background-color: var(--inactiveColor);
         border-radius: var(--winRadius);
+        pointer-events: all;
     }
 
     .covermoving {
@@ -162,6 +162,7 @@
         top: 0;
         left: 0;
         z-index: 100;
+        pointer-events: all;
     }
 
 	.rest {
@@ -169,5 +170,7 @@
 		height: 100%;
 		border-radius: var(--winRadius2);
 		overflow: hidden;
+        pointer-events: all;
+        isolation: isolate;
 	}
 </style>
