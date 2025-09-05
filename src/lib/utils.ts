@@ -52,7 +52,7 @@ export class MouseContext {
         this.#activeMouseTarget = "";
         // if (this.#activeMouseTarget && this.#activeMouseTarget.length > 0) this.mouseUpResponders[this.#activeMouseTarget](event);
         for (const [_id, callback] of Object.entries(this.activeMouseSubscribers)) {
-            callback("adawdawdklawdlawdmawldmawlkdmldm8321093289038i");
+            callback("senfjkenfsjkenfseffsefsefsef");
         }
     }
 
@@ -283,6 +283,7 @@ export type ActualWindowProps = {
     top?: string,
     /**
      * Each window gets a unique id. If you register a new window with an id that already exists, the other window will not work anymore.
+     * "senfjkenfsjkenfseffsefsefsef" is a reserved id. DO NOT use this id.
      */
     id: string,
     /**
