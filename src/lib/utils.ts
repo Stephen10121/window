@@ -294,7 +294,12 @@ export type ActualWindowProps = {
      */
     onActiveStateChanged?: (isActive: boolean) => unknown
     /**
-     * This just adds a border to the window to see where it is. Set to true by default
+     * Any basic style to the window box.
+     * To set a box-shadow, just set the --boxShadow variable.
+     * To set a border-radius, just set the --borderRadius variable.
+     * ```ts
+     * style = "--boxShadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;--borderRadius: 5px;"
+     * ```
      */
-    basicStyling?: boolean
+    style?: string
 }

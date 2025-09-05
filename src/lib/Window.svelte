@@ -17,13 +17,13 @@
         top = $bindable("100px"),
         windowDragRegions = [],
         onActiveStateChanged,
-        basicStyling = true,
         resizable = true,
         minHeight = 300,
         minWidth = 300,
         children,
         context,
-        id,
+        style,
+        id
     }: ActualWindowProps = $props();
 
     let window: HTMLElement | undefined = $state();
@@ -58,8 +58,8 @@
 </script>
 
 <section
-    class="{active?"active":"inactive"} {basicStyling ? "styled" : ""}"
-    style="--stackOrder:{stackOrder};width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};"
+    class="{active?"active":"inactive"}"
+    style="--stackOrder:{stackOrder};width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};{style}"
     {id}
     bind:this={window}
 >
@@ -129,13 +129,11 @@
 
 <style>
     section {
+        border-radius: var(--borderRadius, 0);
+        box-shadow: var(--boxShadow);
         z-index: var(--stackOrder);
         position: absolute;
         isolation: isolate;
-    }
-
-    section.styled {
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 2px, rgb(51, 51, 51) 0px 0px 0px 1px;
     }
 
     .draggers {

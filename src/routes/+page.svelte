@@ -1,66 +1,54 @@
 <script lang="ts">
-    import Window from "$lib/Window.svelte";
     import WindowManager from "$lib/WindowManager.svelte";
+    import Window from "$lib/Window.svelte";
 
-    let showPersonalWebsite = $state(true);
+    let exampleCode = `
+<Window
+    id="awindwo"
+    {context}
+    basicStyling={false}
+    windowDragRegions={[{width:"100%",height:"100%",top:"0px",left:"0px"}]}
+>
+    <section style="width:100%;height:100%;background-color:black;">
+        Drag or Resize Me!
+    </section>
+</Window>
+    `;
 
-    let personalWebsiteTop = $state("0x");
-    let personalWebsiteLeft = $state("300px");
-    let personalWebsiteWidth = $state("300px");
-    let personalWebsiteHeight = $state("300px");
+    let showBox = $state(true);
+    let boxWidth = $state("400px");
+    let boxHeight = $state("300px");
+    let boxTop = $state("0px");
+    let boxLeft = $state("0px");
 </script>
 
 <main>
     <WindowManager>
         {#snippet children(context)}
             <Window
-                id="win03"
+                id="awindow"
                 {context}
-                top="0px"
-                left="0px"
-                resizable
-                windowDragRegions={[
-                    {width:"100%",height:"20px",top:"0px",left:"0px"}
-                ]}
-                onActiveStateChanged={(isActive) => {console.log({isActive})}}
+                windowDragRegions={[{width:"100%",height:"100%",top:"0px",left:"0px"}]}
             >
-                Personal Website Monitor
-                <br>
-                <button onclick={() => showPersonalWebsite = !showPersonalWebsite}>Toggle Personal Website</button>
-                <p>Top: {personalWebsiteTop}</p>
-                <p>Left: {personalWebsiteLeft}</p>
-                <p>Width: {personalWebsiteWidth}</p>
-                <p>Height: {personalWebsiteHeight}</p>
+                <section style="width: 100%;height:100%;background-color:black;">
+                    Drag or Resize Me!
+                    <pre><code>{exampleCode}</code></pre>
+                </section>
             </Window>
-            {#if showPersonalWebsite}
-                <Window
-                    id="mouseadwdawup"
-                    {context}
-                    bind:top={personalWebsiteTop}
-                    bind:left={personalWebsiteLeft}
-                    bind:height={personalWebsiteHeight}
-                    bind:width={personalWebsiteWidth}
-                    windowDragRegions={[
-                        {width:"10%",height:"10%",top:"0px",left:"0px", color:"#ff000033"},
-                        {width:"10%",height:"10%",bottom:"0px",left:"0px", color:"blue"},
-                        {width:"10%",height:"10%",top:"0px",right:"0px", color:"green"},
-                        {width:"10%",height:"10%",bottom:"0px",right:"0px", color:"orange"}
-                    ]}
-                    resizable
-                >
-                    <iframe title="Personal Website" src="https://stephengruzin.dev" frameborder="0" style="width: 100%;height:100%"></iframe>
-                </Window>
-            {/if}
-            <!-- <Window
-                id="googlewin"
+            <Window
+                id="setter"
                 {context}
-                top="0px"
-                left="300px"
-                windowDragRegions={[]}
-                resizable
+                windowDragRegions={[{width:"100%",height:"30px",top:"0px",left:"0px"}]}
+                style="--boxShadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;--borderRadius: 5px;"
             >
-                <iframe src="https://challenge.clarkstudents.com" frameborder="0" style="width: 100%;height:100%"></iframe>
-            </Window> -->
+                <div class="setter">
+                    <div class="taskbar"></div>
+                    <div class="rest">
+                        Drag or Resize Me!
+                        <pre><code>{exampleCode}</code></pre>
+                    </div>
+                </div>
+            </Window>
         {/snippet}
     </WindowManager>
 </main>
@@ -69,6 +57,21 @@
     main {
         width: 100%;
         height: 100%;
-        --winRadius: 10px
+    }
+
+    .setter {
+        width: 100%;
+        height: 100%;
+        background-color: #dfdfdf;
+        display: grid;
+        grid-template-rows: 30px auto;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .setter .taskbar {
+        background-color: black;
+        width: 100%;
+        height: 100%;
     }
 </style>
