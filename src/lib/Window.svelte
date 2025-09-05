@@ -40,20 +40,20 @@
     });
 
     function windowOrderChanged(winId: string, winOrder: string[]) {
-        active = id == winId;
         stackOrder = winOrder.indexOf(id) * 10;
+        active = id == winId;
     }
 
     function activeMouseStateChanged(activeMouseListener: string) {
         somethingMoving = activeMouseListener !== "senfjkenfsjkenfseffsefsefsef";
     }
 
-    const unsubscribeWindow = context.windowContext.registerWindow(id, windowOrderChanged);
     const unsubscribeMouseListener = context.mouseContext.subscribeActiveMouseSubscribers(activeMouseStateChanged);
+    const unsubscribeWindow = context.windowContext.registerWindow(id, windowOrderChanged);
 
     onDestroy(() => {
-        unsubscribeWindow();
         unsubscribeMouseListener();
+        unsubscribeWindow();
     });
 </script>
 
@@ -129,9 +129,9 @@
 
 <style>
     section {
+        z-index: var(--stackOrder);
         position: absolute;
         isolation: isolate;
-        z-index: var(--stackOrder);
     }
 
     section.styled {
@@ -139,42 +139,42 @@
     }
 
     .draggers {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        isolation: isolate;
-        z-index: 200;
-        overflow: hidden;
         pointer-events: none;
+        position: absolute;
+        isolation: isolate;
+        overflow: hidden;
+        z-index: 200;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
     }
 
     .cover {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        z-index: 100;
         pointer-events: all;
+        position: absolute;
+        z-index: 100;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
     }
 
     .covermoving {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        z-index: 100;
         pointer-events: all;
+        position: absolute;
+        height: 100%;
+        z-index: 100;
+        width: 100%;
+        left: 0;
+        top: 0;
     }
 
 	.rest {
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
         pointer-events: all;
         isolation: isolate;
+		overflow: hidden;
+		height: 100%;
+		width: 100%;
 	}
 </style>
