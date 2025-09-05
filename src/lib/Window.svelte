@@ -76,6 +76,7 @@
                 id="windowresize{id}right"
                 parentWindow={window}
                 mouseContext={context.mouseContext}
+                {minWidth}
                 desktop={context.desktop}
                 bind:width
             />
@@ -84,6 +85,7 @@
                 parentWindow={window}
                 mouseContext={context.mouseContext}
                 desktop={context.desktop}
+                {minHeight}
                 bind:height
             />
             <LeftResize

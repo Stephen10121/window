@@ -20,15 +20,16 @@
                 left="0px"
                 resizable
                 windowDragRegions={[
-                    {width:"10%",height:"10%",top:"0px",left:"0px", color:"#ff000033"},
-                    {width:"10%",height:"10%",bottom:"0px",left:"0px", color:"blue"},
-                    {width:"10%",height:"10%",top:"0px",right:"0px", color:"green"},
-                    {width:"10%",height:"10%",bottom:"0px",right:"0px", color:"orange"}
+                    {width:"100%",height:"20px",top:"0px",left:"0px"}
                 ]}
             >
-                The whole window is draggable
+                Personal Website Monitor
                 <br>
                 <button onclick={() => showPersonalWebsite = !showPersonalWebsite}>Toggle Personal Website</button>
+                <p>Top: {personalWebsiteTop}</p>
+                <p>Left: {personalWebsiteLeft}</p>
+                <p>Width: {personalWebsiteWidth}</p>
+                <p>Height: {personalWebsiteHeight}</p>
             </Window>
             {#if showPersonalWebsite}
                 <Window

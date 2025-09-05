@@ -7,12 +7,14 @@
         parentWindow,
         mouseContext,
         width = $bindable(),
+        minWidth,
         desktop
     }: {
        id: string,
        parentWindow: HTMLElement,
        mouseContext: MouseContext,
        width: string,
+       minWidth: number,
        desktop: HTMLElement
     } = $props();
 
@@ -33,7 +35,7 @@
 
     const mouseMoveResponderDel = mouseContext.addMouseMoveResponder(id, (event) => {
         const desktopDimension = desktop.getBoundingClientRect();
-        width = (Math.min(event.clientX, desktopDimension.width + desktopDimension.left) - offsetX).toString() + "px";
+        width = Math.max(minWidth, (Math.min(event.clientX, desktopDimension.width + desktopDimension.left) - offsetX)).toString() + "px";
     })
 
     onDestroy(() => {
