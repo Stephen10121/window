@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="mt-8 border-t border-border pt-8 text-center text-sm text-muted-foreground">
-			<p>Built with Svelte · Created by Stephen Gruzin</p>
+			<p>Built with Svelte - Created by Stephen Gruzin</p>
 		</div>
 	</div>
 </footer>
