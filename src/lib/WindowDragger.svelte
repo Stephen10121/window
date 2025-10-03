@@ -40,6 +40,9 @@
     }
 
     function touchIsDown(event: TouchEvent) {
+        document.documentElement.style.overflow = 'hidden';  // firefox, chrome
+        //@ts-ignore
+        document.body.scroll = "no"; // ie only
         const parentDimensions = parentWindow?.getBoundingClientRect();
         const desktopDimensions = desktop.getBoundingClientRect();
 

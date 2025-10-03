@@ -16,7 +16,7 @@ const config = {
 			"@/*": "./src/lib/*"
 		},
 		csrf: {
-			checkOrigin: false,
+			trustedOrigins: ['https://windows.stephengruzin.dev']
 		}
 	}
 };
