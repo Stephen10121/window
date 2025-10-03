@@ -7,7 +7,8 @@
 </script>
 
 <svelte:head>
-    <title>Window Management for Svelte | svelte-windows</title>
+    <title>svelte-windows | Draggable & Resizable Window Manager for Svelte</title>
+    <link rel="canonical" href="https://windows.stephengruzin.dev/">
 </svelte:head>
 
 <main class="min-h-screen">
