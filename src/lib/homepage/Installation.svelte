@@ -2,22 +2,31 @@
     import { Button } from '@/components/ui/button/index.js';
 	import { Copy, Check } from '@lucide/svelte';
 	
+	let copiedInstall = $state(false);
 	let copied = $state(false);
 	
+	const installCodeExample = "npm install svelte-windows";
 	const codeExample = `<script>
-  import { Window } from 'svelte-windows';
-  
-  let position = $state({ x: 100, y: 100 });
-  let size = $state({ width: 400, height: 300 });
+    import { WindowManager, Window } from "svelte-windows";
+
+    const dragRegions = [{width:"100%",height:"100%",top:"0px",left:"0px"}]
 <\/script>
 
-<Window 
-  bind:position 
-  bind:size
-  title="My Window"
->
-  <p>Your content here</p>
-</Window>`;
+<div style="width: 500px;height: 500px;">
+    <WindowManager>
+        {#snippet children(context)}
+            <Window id="window1" {context} windowDragRegions={dragRegions}>
+                <p>Nice Window</p>
+            </Window>
+        {/snippet}
+    </WindowManager>
+</div>`;
+
+	function copyInstallCode() {
+		navigator.clipboard.writeText(installCodeExample);
+		copiedInstall = true;
+		setTimeout(() => copiedInstall = false, 2000);
+	}
 
 	function copyCode() {
 		navigator.clipboard.writeText(codeExample);
@@ -41,9 +50,9 @@
 			<!-- Installation command -->
 			<div class="mt-12 rounded-xl border border-border bg-card p-6">
 				<div class="flex items-center justify-between">
-					<code class="font-mono text-sm text-foreground">npm install svelte-windows</code>
-					<Button size="sm" variant="ghost" onclick={copyCode}>
-						{#if copied}
+					<code class="font-mono text-sm text-foreground">{installCodeExample}</code>
+					<Button size="sm" variant="ghost" onclick={copyInstallCode}>
+						{#if copiedInstall}
 							<Check class="h-4 w-4" />
 						{:else}
 							<Copy class="h-4 w-4" />
@@ -65,12 +74,6 @@
 					</Button>
 				</div>
 				<pre class="overflow-x-auto p-6"><code class="text-sm leading-relaxed text-muted-foreground">{codeExample}</code></pre>
-			</div>
-
-			<div class="mt-12 text-center">
-				<Button size="lg" class="h-12 px-8">
-					View Documentation
-				</Button>
 			</div>
 		</div>
 	</div>

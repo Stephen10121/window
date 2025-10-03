@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Move, Maximize2, Layers, Smartphone } from '@lucide/svelte';
+	import { Move, Maximize2, Layers, Smartphone, ChartArea, Heart } from '@lucide/svelte';
 	
 	const features = [
 		{
@@ -10,7 +10,7 @@
 		{
 			icon: Maximize2,
 			title: 'Resizable',
-			description: 'Resize from any corner or edge. Set minimum and maximum dimensions for your windows.'
+			description: 'Resize from any edge. Set minimum and maximum dimensions for your windows.'
 		},
 		{
 			icon: Layers,
@@ -20,7 +20,17 @@
 		{
 			icon: Smartphone,
 			title: 'Responsive',
-			description: 'Works seamlessly across devices and screen sizes. Handles overflow and scroll situations gracefully.'
+			description: 'Works seamlessly across devices and screen sizes. Handles overflow and scroll situations gracefully. Mobile users can drag windows.'
+		},
+		{
+			icon: ChartArea,
+			title: "Resource Friendly",
+			description: "Only uses the minimum amount of event listeners. 2 move events for the entire window manager scope (1 for mouse events and 1 for mobile touch events.)"
+		},
+		{
+			icon: Heart,
+			title: "Beginner Friendly",
+			description: "You can get started with as little as 17 lines of code, but you can endlessly customise the functionality."
 		}
 	];
 </script>

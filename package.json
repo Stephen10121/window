@@ -64,5 +64,8 @@
 		"windows",
 		"draggable",
 		"resize"
-	]
+	],
+	"dependencies": {
+		"@sveltejs/adapter-node": "^5.3.3"
+	}
 }

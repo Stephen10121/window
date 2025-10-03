@@ -3,9 +3,9 @@
 	import Window from "$lib/Window.svelte";
 
 	let windows = $state([
-		{ id: 3, title: 'Documentation', x: 88, y: 57, width: 300, height: 220, zIndex: 3, active: true },
-		{ id: 2, title: 'Features', x: 161, y: 125, width: 280, height: 180, zIndex: 2, active: false },
-		{ id: 1, title: 'Welcome', x: 290, y: 84, width: 320, height: 200, zIndex: 1, active: false },
+		{ id: 3, title: 'Documentation', x: 20, y: 57, width: 300, height: 220, zIndex: 3, active: true },
+		{ id: 2, title: 'Features', x: 40, y: 100, width: 280, height: 180, zIndex: 2, active: false },
+		{ id: 1, title: 'Welcome', x: 5, y: 130, width: 320, height: 200, zIndex: 1, active: false },
 	]);
 </script>
 
@@ -33,8 +33,8 @@
 							height="{window.height}px"
 							top="{window.y}px"
 							left="{window.x}px"
-							minHeight={100}
-							minWidth={100}
+							minHeight={200}
+							minWidth={200}
 						>
 							<div
 								class="absolute flex flex-col rounded-lg border border-border bg-card shadow-2xl transition-shadow"
@@ -56,7 +56,8 @@
 										{#if window.id === 1}
 											Drag me around! Click to bring to front.
 										{:else if window.id === 2}
-											Fully customizable and responsive.
+											Fully customizable and responsive. <br>
+											Works on mobile devices.
 										{:else}
 											Works in any layout or scroll container.
 										{/if}
@@ -68,9 +69,5 @@
 				{/snippet}
 			</WindowManager>
 		</div>
-
-		<p class="mt-6 text-center text-sm text-muted-foreground">
-			This is a simplified demo. The actual library includes full drag, resize, and constraint features.
-		</p>
 	</div>
 </section>

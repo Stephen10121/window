@@ -4,8 +4,11 @@
     import Footer from "@/homepage/Footer.svelte";
     import Hero from "@/homepage/Hero.svelte";
     import Installation from "@/homepage/Installation.svelte";
-
 </script>
+
+<svelte:head>
+    <title>Window Management for Svelte | svelte-windows</title>
+</svelte:head>
 
 <main class="min-h-screen">
 	<Hero />

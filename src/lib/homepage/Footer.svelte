@@ -16,7 +16,7 @@
 				</div>
 				<div>
 					<div class="font-semibold">svelte-windows</div>
-					<div class="text-sm text-muted-foreground">MIT License</div>
+					<a class="text-sm text-muted-foreground" href="https://github.com/Stephen10121/window/blob/main/LICENSE.md" target="_blank">MIT License</a>
 				</div>
 			</div>
 
@@ -25,7 +25,7 @@
 					<Github class="h-5 w-5" />
 					<span class="sr-only">GitHub</span>
 				</a>
-				<a href="https://windows.stephengruzin.dev" class="text-sm text-muted-foreground transition-colors hover:text-foreground">
+				<a href="/docs" class="text-sm text-muted-foreground transition-colors hover:text-foreground">
 					Documentation
 				</a>
 			</div>
