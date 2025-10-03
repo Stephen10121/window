@@ -63,6 +63,7 @@ export class MouseContext {
         const x = touch.clientX;
         const y = touch.clientY;
         if (this.#activeMouseTarget && this.#activeMouseTarget.length > 0) {
+            event.preventDefault();
             document.documentElement.style.overflow = 'hidden';  // firefox, chrome
             //@ts-ignore
             document.body.scroll = "no"; // ie only
@@ -335,4 +336,11 @@ export type ActualWindowProps = {
      * ```
      */
     style?: string
+    /**
+     * Any basic classes you want to add to the window box. Perfect for tailwind classes.
+     * ```ts
+     * className = "bg-primary hover:shadow-2xl"
+     * ```
+     */
+    className?: string
 }

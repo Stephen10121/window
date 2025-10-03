@@ -23,6 +23,7 @@
         children,
         context,
         style,
+        className,
         id
     }: ActualWindowProps = $props();
 
@@ -58,7 +59,7 @@
 </script>
 
 <section
-    class="{active?"active":"inactive"}"
+    class="{active?"active":"inactive"} {className}"
     style="--stackOrder:{stackOrder};width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};{style}"
     {id}
     bind:this={window}
@@ -129,8 +130,6 @@
 
 <style>
     section {
-        border-radius: var(--borderRadius, 0);
-        box-shadow: var(--boxShadow);
         z-index: var(--stackOrder);
         position: absolute;
         isolation: isolate;

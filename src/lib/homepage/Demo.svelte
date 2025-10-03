@@ -35,9 +35,10 @@
 							left="{window.x}px"
 							minHeight={200}
 							minWidth={200}
+							className="shadow-2xl transition-shadow duration-250 hover:shadow-accent/20"
 						>
 							<div
-								class="absolute flex flex-col rounded-lg border border-border bg-card shadow-2xl transition-shadow"
+								class="absolute flex flex-col rounded-lg border border-border bg-card shadow-2xl transition-shadow overflow-hidden"
 								style="width:100%;height:100%;"
 							>
 								<!-- Window header -->
