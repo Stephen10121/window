@@ -26,9 +26,11 @@
     });
 </script>
 
-<svelte:window 
+<svelte:window
     onmousemove={(e) => mouseContext.mouseMoving(e)}
-    onmouseup={(e) => mouseContext.mouseIsUp(e)}
+    ontouchmove={(e) => mouseContext.touchMoving(e)}
+    onmouseup={(e) => mouseContext.mouseIsUp()}
+    ontouchend={(e) => mouseContext.touchIsUp()}
 />
 
 <section class="rest {somethingMoving ? "somethingDragging" : ""}" bind:this={parentDesktop}>
@@ -49,8 +51,7 @@
         -khtml-user-select: none; /* Konqueror HTML */
     }
     
-    section 
-    {
+    section {
         width: 100%;
         height: 100%;
         pointer-events: none;

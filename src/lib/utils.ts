@@ -1,3 +1,17 @@
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type WithoutChild<T> = T extends { child?: any } ? Omit<T, "child"> : T;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type WithoutChildren<T> = T extends { children?: any } ? Omit<T, "children"> : T;
+export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
+export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?: U | null };
+
 import type { Snippet } from "svelte";
 
 type VertConfig = { top: string, bottom?: undefined } | { bottom: string, top?: undefined };
@@ -18,7 +32,7 @@ export type WindowDragConfig = VertConfig & HorizontalConfig & SizeConfig & OptC
  */
 export class MouseContext {
     #activeMouseTarget = "";
-    mouseMoveResponders: {[key: string]: (event: MouseEvent) => unknown} = {}
+    mouseMoveResponders: {[key: string]: (event: { clientX: number, clientY: number }) => unknown} = {}
     activeMouseSubscribers: {[key: string]: (activeId: string) => unknown} = {}
 
     constructor() {
@@ -36,7 +50,7 @@ export class MouseContext {
         }
     }
 
-    addMouseMoveResponder(id: string, callbackFunc: (event: MouseEvent) => unknown) {
+    addMouseMoveResponder(id: string, callbackFunc: (event: { clientX: number, clientY: number }) => unknown) {
         this.mouseMoveResponders[id] = callbackFunc;
 
         return () => {
@@ -44,16 +58,35 @@ export class MouseContext {
         }
     }
 
+    touchMoving(event: TouchEvent) {
+        const touch = event.touches[0]; // Get the first touch point
+        const x = touch.clientX;
+        const y = touch.clientY;
+        if (this.#activeMouseTarget && this.#activeMouseTarget.length > 0) {
+            document.documentElement.style.overflow = 'hidden';  // firefox, chrome
+            //@ts-ignore
+            document.body.scroll = "no"; // ie only
+            this.mouseMoveResponders[this.#activeMouseTarget]({ clientX: x, clientY: y });
+        }
+    }
+
     mouseMoving(event: MouseEvent) {
         if (this.#activeMouseTarget && this.#activeMouseTarget.length > 0) this.mouseMoveResponders[this.#activeMouseTarget](event);
     }
 
-    mouseIsUp(_event: MouseEvent) {
+    mouseIsUp() {
         this.#activeMouseTarget = "";
         // if (this.#activeMouseTarget && this.#activeMouseTarget.length > 0) this.mouseUpResponders[this.#activeMouseTarget](event);
         for (const [_id, callback] of Object.entries(this.activeMouseSubscribers)) {
             callback("senfjkenfsjkenfseffsefsefsef");
         }
+    }
+
+    touchIsUp() {
+        document.documentElement.style.overflow = 'auto';  // firefox, chrome
+        //@ts-ignore
+        document.body.scroll = "yes"; // ie only
+        this.mouseIsUp();
     }
 
     setActiveMouseTarget(id: string) {

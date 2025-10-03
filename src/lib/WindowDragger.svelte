@@ -39,6 +39,20 @@
         if (!active) activated();
     }
 
+    function touchIsDown(event: TouchEvent) {
+        const parentDimensions = parentWindow?.getBoundingClientRect();
+        const desktopDimensions = desktop.getBoundingClientRect();
+
+        const touch = event.touches[0];
+        
+        if (parentDimensions !== undefined) {
+            offsetY = touch.clientY - parentDimensions.top + desktopDimensions.top;
+            offsetX = touch.clientX - parentDimensions.left + desktopDimensions.left;
+        }
+        mouseContext.setActiveMouseTarget(id);
+        if (!active) activated();
+    }
+
     const mouseMoveResponderDel = mouseContext.addMouseMoveResponder(id, (event) => {
         const parentDimensions = parentWindow?.getBoundingClientRect();
         const desktopDimensions = desktop.getBoundingClientRect();
@@ -55,6 +69,7 @@
 <div
     style="{dragConfig.color ? `background-color:${dragConfig.color};` : ""}--drwidth:{dragConfig.width};--drheight:{dragConfig.height};{dragConfig.bottom === undefined ? `top:${dragConfig.top};` : `bottom:${dragConfig.bottom};`}{dragConfig.right === undefined ? `left:${dragConfig.left};` : `right:${dragConfig.right};`}"
     onmousedown={mouseIsDown}
+    ontouchstart={touchIsDown}
     role="none"
     {id}
 ></div>

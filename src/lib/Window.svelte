@@ -7,8 +7,8 @@
     import TopResize from "./TopResize.svelte";
     import { onDestroy } from "svelte";
 
-    const FORCEMINWIDTH = 300;
-    const FORCEMINHEIGHT = 300;
+    const FORCEMINWIDTH = 120;
+    const FORCEMINHEIGHT = 120;
 
     let {
         height = $bindable("300px"),
