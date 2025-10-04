@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
     import type { MouseContext, WindowDragConfig } from "./utils.js";
+    import { preventScroll } from "./prevent-scroll.js";
 
     let {
         id,
@@ -40,9 +41,10 @@
     }
 
     function touchIsDown(event: TouchEvent) {
-        document.documentElement.style.overflow = 'hidden';  // firefox, chrome
-        //@ts-ignore
-        document.body.scroll = "no"; // ie only
+        const enableScroll = preventScroll();
+        // document.documentElement.style.overflow = 'hidden';  // firefox, chrome
+        // //@ts-ignore
+        // document.body.scroll = "no"; // ie only
         const parentDimensions = parentWindow?.getBoundingClientRect();
         const desktopDimensions = desktop.getBoundingClientRect();
 
@@ -52,7 +54,7 @@
             offsetY = touch.clientY - parentDimensions.top + desktopDimensions.top;
             offsetX = touch.clientX - parentDimensions.left + desktopDimensions.left;
         }
-        mouseContext.setActiveMouseTarget(id);
+        mouseContext.setActiveMouseTarget(id, enableScroll);
         if (!active) activated();
     }
 

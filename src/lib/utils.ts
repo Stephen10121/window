@@ -13,6 +13,7 @@ export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
 export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?: U | null };
 
 import type { Snippet } from "svelte";
+import { preventScroll } from "./prevent-scroll.js";
 
 type VertConfig = { top: string, bottom?: undefined } | { bottom: string, top?: undefined };
 type HorizontalConfig = { left: string, right?: undefined } | { right: string, left?: undefined }
@@ -34,6 +35,7 @@ export class MouseContext {
     #activeMouseTarget = "";
     mouseMoveResponders: {[key: string]: (event: { clientX: number, clientY: number }) => unknown} = {}
     activeMouseSubscribers: {[key: string]: (activeId: string) => unknown} = {}
+    #enableScroll?: () => unknown | undefined = undefined;
 
     constructor() {
         this.#activeMouseTarget = "";
@@ -64,9 +66,12 @@ export class MouseContext {
         const y = touch.clientY;
         if (this.#activeMouseTarget && this.#activeMouseTarget.length > 0) {
             event.preventDefault();
-            document.documentElement.style.overflow = 'hidden';  // firefox, chrome
-            //@ts-ignore
-            document.body.scroll = "no"; // ie only
+            if (this.#enableScroll === undefined) {
+                this.#enableScroll = preventScroll();
+            }
+            // document.documentElement.style.overflow = 'hidden';  // firefox, chrome  reenable scroll 
+            // //@ts-ignore
+            // document.body.scroll = "no"; // ie only
             this.mouseMoveResponders[this.#activeMouseTarget]({ clientX: x, clientY: y });
         }
     }
@@ -77,6 +82,10 @@ export class MouseContext {
 
     mouseIsUp() {
         this.#activeMouseTarget = "";
+        if (this.#enableScroll !== undefined) {
+            this.#enableScroll();
+            this.#enableScroll = undefined;
+        }
         // if (this.#activeMouseTarget && this.#activeMouseTarget.length > 0) this.mouseUpResponders[this.#activeMouseTarget](event);
         for (const [_id, callback] of Object.entries(this.activeMouseSubscribers)) {
             callback("senfjkenfsjkenfseffsefsefsef");
@@ -84,13 +93,14 @@ export class MouseContext {
     }
 
     touchIsUp() {
-        document.documentElement.style.overflow = 'auto';  // firefox, chrome
-        //@ts-ignore
-        document.body.scroll = "yes"; // ie only
+        // document.documentElement.style.overflow = 'auto';  // firefox, chrome
+        // //@ts-ignore
+        // document.body.scroll = "yes"; // ie only
         this.mouseIsUp();
     }
 
-    setActiveMouseTarget(id: string) {
+    setActiveMouseTarget(id: string, enableScroll?: () => unknown) {
+        if (enableScroll) this.#enableScroll = enableScroll;
         this.#activeMouseTarget = id;
         for (const [_id, callback] of Object.entries(this.activeMouseSubscribers)) {
             callback(id);
