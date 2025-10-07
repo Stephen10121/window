@@ -8,14 +8,18 @@
         mouseContext,
         height = $bindable(),
         desktop,
-        minHeight
+        minHeight,
+        active,
+        activated
     }: {
         id: string,
         parentWindow: HTMLElement,
         mouseContext: MouseContext,
         height: string,
         desktop: HTMLElement,
-        minHeight: number
+        minHeight: number,
+        active: boolean,
+        activated: () => unknown
     } = $props();
 
     let offsetY = $state(0);
@@ -30,6 +34,7 @@
             offsetY += (event.clientY - resizerDimensions.top)
         }
         mouseContext.setActiveMouseTarget(id);
+        if (!active) activated();
     }
 
     const mouseMoveResponderDel = mouseContext.addMouseMoveResponder(id, (event) => {

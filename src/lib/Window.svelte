@@ -13,6 +13,7 @@
     let {
         height = $bindable("300px"),
         width = $bindable("300px"),
+        resizeWhenInactive = false,
         left = $bindable("100px"),
         top = $bindable("100px"),
         windowDragRegions = [],
@@ -80,38 +81,46 @@
                 />
             {/each}
         </div>
-        {#if active && resizable}
+        {#if (active || resizeWhenInactive) && resizable}
             <TopResize
+                activated={() => context.windowContext.setActiveWindow(id)}
                 mouseContext={context.mouseContext}
                 desktop={context.desktop}
                 id="windowresize{id}top"
                 bind:height
                 {minHeight}
                 bind:top
+                {active}
             />
             <RightResize
+                activated={() => context.windowContext.setActiveWindow(id)}
                 mouseContext={context.mouseContext}
                 id="windowresize{id}right"
                 desktop={context.desktop}
                 parentWindow={window}
                 {minWidth}
                 bind:width
+                {active}
             />
             <BottomResize
+                activated={() => context.windowContext.setActiveWindow(id)}
                 mouseContext={context.mouseContext}
                 id="windowresize{id}bottom"
                 desktop={context.desktop}
                 parentWindow={window}
                 {minHeight}
                 bind:height
+                {active}
             />
             <LeftResize
+                activated={() => context.windowContext.setActiveWindow(id)}
                 mouseContext={context.mouseContext}
                 id="windowresize{id}left"
                 desktop={context.desktop}
                 {minWidth}
                 bind:width
                 bind:left
+                {active}
             />
         {/if}
     {/if}

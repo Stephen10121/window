@@ -353,4 +353,11 @@ export type ActualWindowProps = {
      * ```
      */
     className?: string
+    /**
+     * If set to true, you will be able to resize inactive windows. Possible performance drops may happen.
+     * ```ts
+     * resizeWhenInactive = true
+     * ```
+     */
+    resizeWhenInactive?: boolean
 }
