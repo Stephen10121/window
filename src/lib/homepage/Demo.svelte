@@ -40,7 +40,7 @@
 								minHeight={200}
 								minWidth={200}
 								resizeWhenInactive={false}
-								className="shadow-2xl transition-shadow duration-250 hover:shadow-accent/20"
+								outerClassName="shadow-2xl transition-shadow duration-250 hover:shadow-accent/20"
 							>
 								<div
 									class="absolute flex flex-col rounded-lg border border-border bg-card shadow-2xl transition-shadow overflow-hidden"
