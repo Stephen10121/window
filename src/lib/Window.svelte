@@ -23,8 +23,10 @@
         minWidth = 300,
         children,
         context,
-        style,
-        className,
+        innerStyle,
+        innerClassName,
+        outerStyle,
+        outerClassName,
         id
     }: ActualWindowProps = $props();
 
@@ -60,8 +62,8 @@
 </script>
 
 <section
-    class="{active?"active":"inactive"} {className}"
-    style="--stackOrder:{stackOrder};width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};{style}"
+    class="{active?"active":"inactive"} {outerClassName}"
+    style="--stackOrder:{stackOrder};width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};{outerStyle}"
     {id}
     bind:this={window}
 >
@@ -124,7 +126,7 @@
             />
         {/if}
     {/if}
-    <div class="rest">
+    <div class="rest {innerClassName}" style={innerStyle}>
         {#if children}
             {@render children()}
         {/if}

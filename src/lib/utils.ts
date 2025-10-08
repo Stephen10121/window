@@ -331,21 +331,41 @@ export type ActualWindowProps = {
      */
     onActiveStateChanged?: (isActive: boolean) => unknown
     /**
-     * Any basic style to the window box.
-     * To set a box-shadow, just set the --boxShadow variable.
-     * To set a border-radius, just set the --borderRadius variable.
+     * Any basic style to the inner window box.
+     * The reason why we have an innerStyle and outerStyle argument is because the innerStyle cannot set any css properties outside the window box because of overflow hidden.
+     * So, do NOT use this to set the shadow of the window. Use "outerStyle" instead.
      * ```ts
-     * style = "--boxShadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;--borderRadius: 5px;"
+     * innerStyle = "border-radius: 10px;"
      * ```
      */
-    style?: string
+    innerStyle?: string
     /**
-     * Any basic classes you want to add to the window box. Perfect for tailwind classes.
+     * Any classes to the inside of the window box.
+     * The reason why we have an innerClassName and outerClassName argument is because the innerClassName cannot set any css classes outside the window box because of overflow hidden.
+     * So, do NOT use this to set the shadow of the window. Use "outerClassName" instead.
      * ```ts
-     * className = "bg-primary hover:shadow-2xl"
+     * innerClassName = "rounded-xs"
      * ```
      */
-    className?: string
+    innerClassName?: string
+    /**
+     * Any basic style to the outside of the window box.
+     * The reason why we have an innerStyle and outerStyle argument is because the innerStyle cannot set any css properties outside the window box because of overflow hidden.
+     * So, do NOT use this to set the shadow of the window. Use "outerStyle" instead.
+     * ```ts
+     * outerStyle = "box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;"
+     * ```
+     */
+    outerStyle?: string
+    /**
+     * Any classes to the outside of the window box.
+     * The reason why we have an innerClassName and outerClassName argument is because the innerClassName cannot set any css classes outside the window box because of overflow hidden.
+     * So, do NOT use this to set the shadow of the window. Use "outerClassName" instead.
+     * ```ts
+     * outerClassName = "shadow-2xs"
+     * ```
+     */
+    outerClassName?: string
     /**
      * If set to true, you will be able to resize inactive windows. Possible performance drops may happen.
      * ```ts
