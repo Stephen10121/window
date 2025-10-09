@@ -64,6 +64,7 @@
 											{:else if window.id === 2}
 												Fully customizable and responsive. <br>
 												Works on mobile devices.
+												<button onclick={console.log}>Wow</button>
 											{:else}
 												Works in any layout or scroll container.
 											{/if}

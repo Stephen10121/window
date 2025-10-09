@@ -66,6 +66,8 @@
     style="--stackOrder:{stackOrder};width:max({width},min({Math.max(FORCEMINWIDTH, minWidth)}px, 100%));height:max({height},min({Math.max(FORCEMINHEIGHT, minHeight)}px, 100%));top:{top};left:{left};{outerStyle}"
     {id}
     bind:this={window}
+    onmousedown={() => context.windowContext.setActiveWindow(id)}
+    role="none"
 >
     {#if context.desktop}
         <div class="draggers">
@@ -131,9 +133,6 @@
             {@render children()}
         {/if}
     </div>
-    {#if !active}
-        <div class="cover" onmousedown={() => context.windowContext.setActiveWindow(id)} role="none"></div>
-    {/if}
     {#if somethingMoving}
         <div class="covermoving" role="none"></div>
     {/if}
