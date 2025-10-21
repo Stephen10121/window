@@ -374,3 +374,22 @@ export type ActualWindowProps = {
      */
     resizeWhenInactive?: boolean
 }
+
+
+// Took the next 2 functions from runed, https://github.com/svecosystem/runed/blob/main/packages/runed/src/lib/internal/utils/dom.ts
+
+
+export function getActiveElement(document: DocumentOrShadowRoot): Element | null {
+	let activeElement = document.activeElement;
+
+	while (activeElement?.shadowRoot) {
+		const node = activeElement.shadowRoot.activeElement;
+		if (node === activeElement) break;
+		else activeElement = node;
+	}
+
+	return activeElement;
+}
+export function isOrContainsTarget(node: Element, target: Element) {
+	return node === target || node.contains(target);
+}
