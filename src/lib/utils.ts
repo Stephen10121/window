@@ -111,6 +111,7 @@ export class WindowContext {
     registeredWindows: {[key: string]: (windId: string, winStackOrder: string[]) => unknown} = {}
     // If anything thats not a window wants to know what the current active window is, they can subscript to activeWindowsSubscribers
     activeWindowSubscribers: {[key: string]: (windId: string, winStackOrder: string[]) => unknown} = {}
+    iframeWindowClickedListeners: {[key: string]: (windId: string) => unknown} = {}
 
     constructor() {
         this.activeWindow = "";
@@ -118,7 +119,7 @@ export class WindowContext {
         this.activeWindowSubscribers = {};
     }
 
-    setActiveWindow(winId: string) {
+    setActiveWindow(winId: string, iframeClicked?: boolean) {
         if (this.orderOfActiveWindows.includes(winId)) {
             let newActiveWinOrder: string[] = [];
             for (let i=0;i<this.orderOfActiveWindows.length;i++) {
@@ -140,6 +141,12 @@ export class WindowContext {
 
         for (const [_id, callback] of Object.entries(this.activeWindowSubscribers)) {
             callback(winId, this.orderOfActiveWindows);
+        }
+
+        if (iframeClicked) {
+            for (const [_id, callback] of Object.entries(this.iframeWindowClickedListeners)) {
+                callback(this.activeWindow);
+            }
         }
     }
 
@@ -181,6 +188,15 @@ export class WindowContext {
         const randomId = crypto.randomUUID();
         this.activeWindowSubscribers[randomId] = callBack;
         callBack(this.activeWindow, this.orderOfActiveWindows);
+
+        return () => {
+            delete this.activeWindowSubscribers[randomId];
+        }
+    }
+
+    iframeWindowClickedSubscribe(callBack: (windId: string) => unknown) {
+        const randomId = crypto.randomUUID();
+        this.iframeWindowClickedListeners[randomId] = callBack;
 
         return () => {
             delete this.activeWindowSubscribers[randomId];

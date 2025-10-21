@@ -30,7 +30,7 @@
             let doc = document.getElementById(Object.keys(windowContext.registeredWindows)[i]);
             if (!doc) continue
 
-            if (isOrContainsTarget(doc, activeElement)) windowContext.setActiveWindow(Object.keys(windowContext.registeredWindows)[i])
+            if (isOrContainsTarget(doc, activeElement)) windowContext.setActiveWindow(Object.keys(windowContext.registeredWindows)[i], true)
         }
     }
 
