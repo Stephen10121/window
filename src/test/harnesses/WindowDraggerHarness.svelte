@@ -1,7 +1,6 @@
 <script lang="ts">
-	import WindowDragger from "../WindowDragger.svelte";
-	import type { MouseContext } from "../utils.js";
-	import type { WindowDragConfig } from "../utils.js";
+	import WindowDragger from "../../lib/WindowDragger.svelte";
+	import type { MouseContext, WindowDragConfig } from "../../lib/utils.js";
 
 	let {
 		mouseContext,

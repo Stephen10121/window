@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { INACTIVE_MOUSE_ID, MouseContext, WindowContext } from "./utils.js";
+import { INACTIVE_MOUSE_ID, MouseContext, WindowContext } from "../../lib/utils.js";
 
 describe("MouseContext", () => {
 	it("notifies active subscribers and broadcasts inactive sentinel on mouse up", () => {

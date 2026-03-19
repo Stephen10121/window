@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { describe, expect, it, vi } from "vitest";
-import WindowDraggerHarness from "./test-harnesses/WindowDraggerHarness.svelte";
-import { MouseContext } from "./utils.js";
+import WindowDraggerHarness from "../harnesses/WindowDraggerHarness.svelte";
+import { MouseContext } from "../../lib/utils.js";
 
 function createRect(left: number, top: number, width: number, height: number): DOMRect {
 	return {

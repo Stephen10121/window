@@ -1,8 +1,8 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { describe, expect, it } from "vitest";
-import Window from "./Window.svelte";
-import { MouseContext, WindowContext } from "./utils.js";
+import Window from "../../lib/Window.svelte";
+import { MouseContext, WindowContext } from "../../lib/utils.js";
 
 function createRect(left: number, top: number, width: number, height: number): DOMRect {
 	return {

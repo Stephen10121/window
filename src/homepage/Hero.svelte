@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { Button } from "$lib/components/ui/button/index.js";
-	import { Github } from '@lucide/svelte';
+	import { Button } from "../components/ui/button/index.js";
+	import { Github } from "@lucide/svelte";
 </script>
 
 <section class="relative overflow-hidden border-b border-border">
 	<!-- Background grid pattern -->
 	<div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-	
+
 	<div class="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
 		<!-- Logo -->
 		<div class="mb-8 flex items-center gap-3">
@@ -26,9 +26,9 @@
 				Window Management
 				<span class="block text-accent">for Svelte</span>
 			</h1>
-			
+
 			<p class="mx-auto mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl">
-				A draggable and resizable window manager that works seamlessly in your projects. 
+				A draggable and resizable window manager that works seamlessly in your projects.
 				Works in scroll areas, overflow situations, with intelligent window stacking.
 			</p>
 

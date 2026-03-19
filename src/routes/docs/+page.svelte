@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button } from "$lib/components/ui/button/index.js";
+    import { Button } from "../../components/ui/button/index.js";
 
     const installCommand = "npm install svelte-windows";
     const quickStartExample = `<script>
@@ -37,6 +37,7 @@
     const windowProps = [
         { name: "id", type: "string", default: "-", required: "Yes", description: "Unique id for registration and stacking order." },
         { name: "context", type: "{ mouseContext, windowContext, desktop }", default: "-", required: "Yes", description: "Context provided by WindowManager snippet." },
+        { name: "children", type: "Snippet", default: "undefined", required: "No", description: "Window content rendered inside the managed window shell." },
         { name: "windowDragRegions", type: "WindowDragConfig[]", default: "[]", required: "No", description: "Absolute drag target regions inside the window." },
         { name: "resizable", type: "boolean", default: "true", required: "No", description: "Enable or disable all edge and corner resize handles." },
         { name: "resizeWhenInactive", type: "boolean", default: "false", required: "No", description: "Allow resize handles on inactive windows." },
@@ -47,8 +48,19 @@
         { name: "innerClassName / outerClassName", type: "string", default: "undefined", required: "No", description: "Class hooks for interior or shell." }
     ];
 
+    const windowManagerProps = [
+        { name: "children", type: "Snippet<[context]>", default: "undefined", required: "No", description: "Snippet render function that receives `{ mouseContext, windowContext, desktop }`." },
+        { name: "mouseContext", type: "MouseContext", default: "new MouseContext()", required: "No", description: "Optional shared mouse coordinator instance for advanced composition." },
+        { name: "windowContext", type: "WindowContext", default: "new WindowContext()", required: "No", description: "Optional shared window stack manager instance." }
+    ];
+
+    const dragConfigExample = `const dragRegions = [
+    { top: "0px", left: "0px", width: "100%", height: "40px" },
+    { bottom: "0px", right: "0px", width: "120px", height: "32px", color: "rgba(255,255,255,0.08)" }
+];`;
+
     const lifecycleEvents = [
-        { name: "onActiveStateChanged", payload: "{ isActive: boolean }", description: "Fires when this window becomes active/inactive." },
+        { name: "onActiveStateChanged", payload: "boolean", description: "Fires when this window becomes active/inactive." },
         { name: "onDragStart", payload: "{ top: string, left: string }", description: "Fires when drag begins on this window." },
         { name: "onDragEnd", payload: "{ top: string, left: string }", description: "Fires when drag finishes." },
         { name: "onResizeStart", payload: "{ width: string, height: string }", description: "Fires when any edge/corner resize starts." },
@@ -109,6 +121,60 @@
             <div class="mt-6 rounded-xl border border-border bg-card">
                 <div class="border-b border-border px-5 py-3 text-sm text-muted-foreground">Example.svelte</div>
                 <pre class="overflow-x-auto p-5"><code class="text-sm leading-relaxed text-muted-foreground">{quickStartExample}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="border-b border-border">
+        <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+            <h2 class="text-3xl font-bold tracking-tight">WindowManager props</h2>
+            <p class="mt-3 max-w-3xl text-muted-foreground">
+                You can pass your own context instances when coordinating multiple managers or integrating external window state.
+            </p>
+            <div class="mt-6 overflow-x-auto rounded-xl border border-border">
+                <table class="w-full min-w-[780px] divide-y divide-border text-left text-sm">
+                    <thead class="bg-secondary/40 text-muted-foreground">
+                        <tr>
+                            <th class="px-4 py-3 font-medium">Prop</th>
+                            <th class="px-4 py-3 font-medium">Type</th>
+                            <th class="px-4 py-3 font-medium">Default</th>
+                            <th class="px-4 py-3 font-medium">Required</th>
+                            <th class="px-4 py-3 font-medium">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border bg-card">
+                        {#each windowManagerProps as prop}
+                            <tr>
+                                <td class="px-4 py-3 font-mono text-xs">{prop.name}</td>
+                                <td class="px-4 py-3 text-xs">{prop.type}</td>
+                                <td class="px-4 py-3 text-xs">{prop.default}</td>
+                                <td class="px-4 py-3 text-xs">{prop.required}</td>
+                                <td class="px-4 py-3 text-xs text-muted-foreground">{prop.description}</td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="border-b border-border">
+        <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+            <h2 class="text-3xl font-bold tracking-tight">WindowDragConfig</h2>
+            <p class="mt-3 max-w-3xl text-muted-foreground">
+                Each drag region requires <code>width</code> and <code>height</code> and can be positioned using either
+                <code>top</code> or <code>bottom</code> plus either <code>left</code> or <code>right</code>. You can optionally pass
+                <code>color</code> to visualize a drag region while designing custom chrome.
+            </p>
+            <ul class="mt-4 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
+                <li>Vertical anchor: choose exactly one of <code>top</code> or <code>bottom</code>.</li>
+                <li>Horizontal anchor: choose exactly one of <code>left</code> or <code>right</code>.</li>
+                <li>Size keys <code>width</code> and <code>height</code> are required strings.</li>
+                <li><code>color</code> is optional and useful for debugging hit zones.</li>
+            </ul>
+            <div class="mt-6 rounded-xl border border-border bg-card">
+                <div class="border-b border-border px-5 py-3 text-sm text-muted-foreground">WindowDragConfig example</div>
+                <pre class="overflow-x-auto p-5"><code class="text-sm leading-relaxed text-muted-foreground">{dragConfigExample}</code></pre>
             </div>
         </div>
     </section>
