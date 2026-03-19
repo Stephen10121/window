@@ -1,10 +1,18 @@
 <script lang="ts">
-    import type { ActualWindowProps } from "./utils.js";
+    import {
+        INACTIVE_MOUSE_ID,
+        type ActualWindowProps,
+        type WindowPosition
+    } from "./utils.js";
     import WindowDragger from "./WindowDragger.svelte";
     import BottomResize from "./BottomResize.svelte";
     import RightResize from "./RightResize.svelte";
     import LeftResize from "./LeftResize.svelte";
     import TopResize from "./TopResize.svelte";
+    import TopLeftResize from "./TopLeftResize.svelte";
+    import TopRightResize from "./TopRightResize.svelte";
+    import BottomLeftResize from "./BottomLeftResize.svelte";
+    import BottomRightResize from "./BottomRightResize.svelte";
     import { onDestroy } from "svelte";
 
     const FORCEMINWIDTH = 120;
@@ -18,6 +26,10 @@
         top = $bindable("100px"),
         windowDragRegions = [],
         onActiveStateChanged,
+        onDragStart,
+        onDragEnd,
+        onResizeStart,
+        onResizeEnd,
         resizable = true,
         minHeight = 300,
         minWidth = 300,
@@ -34,6 +46,7 @@
     let somethingMoving = $state(false);
     let stackOrder = $state(1);
     let active = $state(false);
+    let activeInteraction: "drag" | "resize" | null = $state(null);
 
     function activeStateHasChanged(state: boolean) {
         if (onActiveStateChanged) onActiveStateChanged(state);
@@ -49,7 +62,29 @@
     }
 
     function activeMouseStateChanged(activeMouseListener: string) {
-        somethingMoving = activeMouseListener !== "senfjkenfsjkenfseffsefsefsef";
+        if (activeMouseListener === INACTIVE_MOUSE_ID) {
+            if (activeInteraction === "drag" && onDragEnd) onDragEnd({ top, left });
+            if (activeInteraction === "resize" && onResizeEnd) onResizeEnd({ width, height });
+            activeInteraction = null;
+            somethingMoving = false;
+            return;
+        }
+
+        if (activeMouseListener.startsWith(`windowDragger${id}`)) {
+            activeInteraction = "drag";
+        } else if (activeMouseListener.startsWith(`windowresize${id}`)) {
+            activeInteraction = "resize";
+        }
+
+        somethingMoving = true;
+    }
+
+    function dragStarted(position: WindowPosition) {
+        if (onDragStart) onDragStart(position);
+    }
+
+    function resizeStarted() {
+        if (onResizeStart) onResizeStart({ width, height });
     }
 
     const unsubscribeMouseListener = context.mouseContext.subscribeActiveMouseSubscribers(activeMouseStateChanged);
@@ -82,6 +117,7 @@
                     bind:left
                     bind:top
                     {active}
+                    onDragStart={dragStarted}
                 />
             {/each}
         </div>
@@ -95,6 +131,7 @@
                 {minHeight}
                 bind:top
                 {active}
+                onResizeStart={resizeStarted}
             />
             <RightResize
                 activated={() => context.windowContext.setActiveWindow(id)}
@@ -105,6 +142,7 @@
                 {minWidth}
                 bind:width
                 {active}
+                onResizeStart={resizeStarted}
             />
             <BottomResize
                 activated={() => context.windowContext.setActiveWindow(id)}
@@ -115,6 +153,7 @@
                 {minHeight}
                 bind:height
                 {active}
+                onResizeStart={resizeStarted}
             />
             <LeftResize
                 activated={() => context.windowContext.setActiveWindow(id)}
@@ -125,6 +164,62 @@
                 bind:width
                 bind:left
                 {active}
+                onResizeStart={resizeStarted}
+            />
+            <TopLeftResize
+                activated={() => context.windowContext.setActiveWindow(id)}
+                mouseContext={context.mouseContext}
+                id="windowresize{id}topLeft"
+                bind:width
+                bind:height
+                bind:left
+                bind:top
+                {minWidth}
+                {minHeight}
+                {active}
+                onResizeStart={resizeStarted}
+            />
+            <TopRightResize
+                activated={() => context.windowContext.setActiveWindow(id)}
+                mouseContext={context.mouseContext}
+                id="windowresize{id}topRight"
+                desktop={context.desktop}
+                bind:width
+                bind:height
+                bind:top
+                {left}
+                {minWidth}
+                {minHeight}
+                {active}
+                onResizeStart={resizeStarted}
+            />
+            <BottomLeftResize
+                activated={() => context.windowContext.setActiveWindow(id)}
+                mouseContext={context.mouseContext}
+                id="windowresize{id}bottomLeft"
+                desktop={context.desktop}
+                bind:width
+                bind:height
+                bind:left
+                {top}
+                {minWidth}
+                {minHeight}
+                {active}
+                onResizeStart={resizeStarted}
+            />
+            <BottomRightResize
+                activated={() => context.windowContext.setActiveWindow(id)}
+                mouseContext={context.mouseContext}
+                id="windowresize{id}bottomRight"
+                desktop={context.desktop}
+                bind:width
+                bind:height
+                {left}
+                {top}
+                {minWidth}
+                {minHeight}
+                {active}
+                onResizeStart={resizeStarted}
             />
         {/if}
     {/if}
@@ -151,16 +246,6 @@
         isolation: isolate;
         overflow: hidden;
         z-index: 200;
-        height: 100%;
-        width: 100%;
-        left: 0;
-        top: 0;
-    }
-
-    .cover {
-        pointer-events: all;
-        position: absolute;
-        z-index: 100;
         height: 100%;
         width: 100%;
         left: 0;

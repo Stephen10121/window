@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import type { MouseContext, WindowDragConfig } from "./utils.js";
+    import type { MouseContext, WindowDragConfig, WindowPosition } from "./utils.js";
     import { preventScroll } from "./prevent-scroll.js";
 
     let {
@@ -12,7 +12,8 @@
         top = $bindable(),
         left = $bindable(),
         active,
-        activated
+        activated,
+        onDragStart
     }: {
         id: string,
         parentWindow: HTMLElement,
@@ -22,7 +23,8 @@
         top: string,
         left: string,
         active: boolean,
-        activated: () => unknown
+        activated: () => unknown,
+        onDragStart?: (position: WindowPosition) => unknown
     } = $props();
 
     let offsetX = $state(0);
@@ -38,13 +40,11 @@
         }
         mouseContext.setActiveMouseTarget(id);
         if (!active) activated();
+        if (onDragStart) onDragStart({ top, left });
     }
 
     function touchIsDown(event: TouchEvent) {
         const enableScroll = preventScroll();
-        // document.documentElement.style.overflow = 'hidden';  // firefox, chrome
-        // //@ts-ignore
-        // document.body.scroll = "no"; // ie only
         const parentDimensions = parentWindow?.getBoundingClientRect();
         const desktopDimensions = desktop.getBoundingClientRect();
 
@@ -56,6 +56,7 @@
         }
         mouseContext.setActiveMouseTarget(id, enableScroll);
         if (!active) activated();
+        if (onDragStart) onDragStart({ top, left });
     }
 
     const mouseMoveResponderDel = mouseContext.addMouseMoveResponder(id, (event) => {
@@ -63,7 +64,6 @@
         const desktopDimensions = desktop.getBoundingClientRect();
         top = (Math.min(desktopDimensions.height - parentDimensions.height, Math.max(0, event.clientY - offsetY))).toString() + "px";
         left = (Math.min(desktopDimensions.width - parentDimensions.width, Math.max(0, event.clientX - offsetX))).toString() + "px";
-        // left = (Math.min(document.body.clientWidth - parentDimensions.width, Math.max(0, event.clientX - offsetX))).toString() + "px";
     })
 
     onDestroy(() => {

@@ -1,6 +1,13 @@
 <script lang="ts">
     import { onDestroy, type Snippet } from "svelte";
-    import { getActiveElement, isOrContainsTarget, MouseContext, WindowContext, type ActualWindowProps } from "./utils.js";
+    import {
+        getActiveElement,
+        INACTIVE_MOUSE_ID,
+        isOrContainsTarget,
+        MouseContext,
+        WindowContext,
+        type ActualWindowProps
+    } from "./utils.js";
 
     type ParentDesktop = HTMLElement | undefined;
 
@@ -18,7 +25,7 @@
     let somethingMoving = $state(false);
 
     const mouseUnsub = mouseContext.subscribeActiveMouseSubscribers((active) => {
-        somethingMoving = active !== "senfjkenfsjkenfseffsefsefsef";
+        somethingMoving = active !== INACTIVE_MOUSE_ID;
     });
 
     // Checks if the user clicked an iframe that happens to be in the window manager scope.

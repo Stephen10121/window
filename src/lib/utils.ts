@@ -1,12 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type WithoutChild<T> = T extends { child?: any } ? Omit<T, "child"> : T;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type WithoutChildren<T> = T extends { children?: any } ? Omit<T, "children"> : T;
-export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
 export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?: U | null };
 
 import type { Snippet } from "svelte";
 import { preventScroll } from "./prevent-scroll.js";
+
+export const INACTIVE_MOUSE_ID = "senfjkenfsjkenfseffsefsefsef" as const;
+export type WindowPosition = { top: string, left: string };
+export type WindowDimensions = { width: string, height: string };
 
 type VertConfig = { top: string, bottom?: undefined } | { bottom: string, top?: undefined };
 type HorizontalConfig = { left: string, right?: undefined } | { right: string, left?: undefined }
@@ -62,9 +61,6 @@ export class MouseContext {
             if (this.#enableScroll === undefined) {
                 this.#enableScroll = preventScroll();
             }
-            // document.documentElement.style.overflow = 'hidden';  // firefox, chrome  reenable scroll 
-            // //@ts-ignore
-            // document.body.scroll = "no"; // ie only
             this.mouseMoveResponders[this.#activeMouseTarget]({ clientX: x, clientY: y });
         }
     }
@@ -79,16 +75,12 @@ export class MouseContext {
             this.#enableScroll();
             this.#enableScroll = undefined;
         }
-        // if (this.#activeMouseTarget && this.#activeMouseTarget.length > 0) this.mouseUpResponders[this.#activeMouseTarget](event);
         for (const [_id, callback] of Object.entries(this.activeMouseSubscribers)) {
-            callback("senfjkenfsjkenfseffsefsefsef");
+            callback(INACTIVE_MOUSE_ID);
         }
     }
 
     touchIsUp() {
-        // document.documentElement.style.overflow = 'auto';  // firefox, chrome
-        // //@ts-ignore
-        // document.body.scroll = "yes"; // ie only
         this.mouseIsUp();
     }
 
@@ -199,7 +191,7 @@ export class WindowContext {
         this.iframeWindowClickedListeners[randomId] = callBack;
 
         return () => {
-            delete this.activeWindowSubscribers[randomId];
+            delete this.iframeWindowClickedListeners[randomId];
         }
     }
 
@@ -336,7 +328,7 @@ export type ActualWindowProps = {
     top?: string,
     /**
      * Each window gets a unique id. If you register a new window with an id that already exists, the other window will not work anymore.
-     * "senfjkenfsjkenfseffsefsefsef" is a reserved id. DO NOT use this id.
+     * `INACTIVE_MOUSE_ID` is a reserved id. DO NOT use this id.
      */
     id: string,
     children?: Snippet,
@@ -346,6 +338,22 @@ export type ActualWindowProps = {
      * @returns
      */
     onActiveStateChanged?: (isActive: boolean) => unknown
+    /**
+     * Called when dragging starts.
+     */
+    onDragStart?: (position: WindowPosition) => unknown
+    /**
+     * Called when dragging ends.
+     */
+    onDragEnd?: (position: WindowPosition) => unknown
+    /**
+     * Called when resizing starts.
+     */
+    onResizeStart?: (dimensions: WindowDimensions) => unknown
+    /**
+     * Called when resizing ends.
+     */
+    onResizeEnd?: (dimensions: WindowDimensions) => unknown
     /**
      * Any basic style to the inner window box.
      * The reason why we have an innerStyle and outerStyle argument is because the innerStyle cannot set any css properties outside the window box because of overflow hidden.

@@ -6,8 +6,11 @@
     let {
         id,
         mouseContext,
+        width = $bindable(),
         height = $bindable(),
-        top = $bindable(),
+        left,
+        top,
+        minWidth,
         minHeight,
         desktop,
         active,
@@ -16,8 +19,11 @@
     }: {
         id: string,
         mouseContext: MouseContext,
+        width: string,
         height: string,
+        left: string,
         top: string,
+        minWidth: number,
         minHeight: number,
         desktop: HTMLElement,
         active: boolean,
@@ -25,13 +31,28 @@
         onResizeStart?: () => unknown
     } = $props();
 
-    let offsetY = $state(0);
+    let startX = $state(0);
+    let startY = $state(0);
+    let startWidth = $state(0);
+    let startHeight = $state(0);
+    let startLeft = $state(0);
+    let startTop = $state(0);
+
+    function clamp(value: number, min: number, max: number) {
+        return Math.min(max, Math.max(min, value));
+    }
+
+    function setStartState(clientX: number, clientY: number) {
+        startX = clientX;
+        startY = clientY;
+        startWidth = parseInt(width.slice(0, -2));
+        startHeight = parseInt(height.slice(0, -2));
+        startLeft = parseInt(left.slice(0, -2));
+        startTop = parseInt(top.slice(0, -2));
+    }
 
     function mouseIsDown(event: MouseEvent) {
-        const resizerDimensions = document.getElementById(id)?.getBoundingClientRect();
-        if (resizerDimensions !== undefined) {
-            offsetY = 5-(event.clientY - resizerDimensions.top)
-        }
+        setStartState(event.clientX, event.clientY);
         mouseContext.setActiveMouseTarget(id);
         if (!active) activated();
         if (onResizeStart) onResizeStart();
@@ -39,11 +60,8 @@
 
     function touchIsDown(event: TouchEvent) {
         const enableScroll = preventScroll();
-        const resizerDimensions = document.getElementById(id)?.getBoundingClientRect();
         const touch = event.touches[0];
-        if (resizerDimensions !== undefined) {
-            offsetY = 5 - (touch.clientY - resizerDimensions.top);
-        }
+        setStartState(touch.clientX, touch.clientY);
         mouseContext.setActiveMouseTarget(id, enableScroll);
         if (!active) activated();
         if (onResizeStart) onResizeStart();
@@ -51,14 +69,18 @@
 
     const mouseMoveResponderDel = mouseContext.addMouseMoveResponder(id, (event) => {
         const desktopDims = desktop.getBoundingClientRect();
+        const deltaX = event.clientX - startX;
+        const deltaY = event.clientY - startY;
 
-        const prevTop = parseInt(top.slice(0, -2));
-        const newTop = event.clientY + offsetY - desktopDims.top;
-        const heightNum = parseInt(height.slice(0, -2));
+        const maxWidth = desktopDims.width - startLeft;
+        const maxHeight = desktopDims.height - startTop;
 
-        top = Math.abs(Math.max(minHeight, prevTop - Math.max(newTop, 0) + heightNum) - heightNum - parseInt(top.slice(0, -2))).toString() + "px";
-        height = Math.max(minHeight, prevTop - Math.max(newTop, 0) + heightNum).toString() + "px";
-    })
+        const nextWidth = clamp(startWidth + deltaX, minWidth, maxWidth);
+        const nextHeight = clamp(startHeight + deltaY, minHeight, maxHeight);
+
+        width = `${nextWidth}px`;
+        height = `${nextHeight}px`;
+    });
 
     onDestroy(() => {
         mouseMoveResponderDel();
@@ -69,12 +91,13 @@
 
 <style>
     div {
-        width: 100%;
-        height: 5px;
+        width: 10px;
+        height: 10px;
         position: absolute;
-        top: -5px;
-        left: 0;
-        cursor: n-resize;
+        bottom: -5px;
+        right: -5px;
+        cursor: nwse-resize;
         pointer-events: all;
+        z-index: 250;
     }
 </style>
