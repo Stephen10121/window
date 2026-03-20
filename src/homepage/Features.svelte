@@ -1,26 +1,26 @@
 <script lang="ts">
-	import { Move, Maximize2, Layers, Smartphone, ChartArea, Heart } from '@lucide/svelte';
-	
+	import { Move, Maximize2, Layers, Smartphone, ChartArea, Heart } from "@lucide/svelte";
+
 	const features = [
 		{
 			icon: Move,
-			title: 'Draggable',
-			description: 'Smooth dragging with customizable constraints and boundaries. Works perfectly in scroll containers.'
+			title: "Draggable",
+			description: "Smooth dragging with customizable constraints and boundaries. Works perfectly in scroll containers."
 		},
 		{
 			icon: Maximize2,
-			title: 'Resizable',
-			description: 'Resize from any edge. Set minimum and maximum dimensions for your windows.'
+			title: "Resizable",
+			description: "Resize from any edge. Set minimum and maximum dimensions for your windows."
 		},
 		{
 			icon: Layers,
-			title: 'Smart Stacking',
-			description: 'Automatic z-index management based on window activity. Recently active windows come to the front.'
+			title: "Smart Stacking",
+			description: "Automatic z-index management based on window activity. Recently active windows come to the front."
 		},
 		{
 			icon: Smartphone,
-			title: 'Responsive',
-			description: 'Works seamlessly across devices and screen sizes. Handles overflow and scroll situations gracefully. Mobile users can drag windows.'
+			title: "Responsive",
+			description: "Works seamlessly across devices and screen sizes. Handles overflow and scroll situations gracefully. Mobile users can drag windows."
 		},
 		{
 			icon: ChartArea,

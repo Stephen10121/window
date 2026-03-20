@@ -1,11 +1,11 @@
 <script lang="ts">
-    import WindowManager from "@/WindowManager.svelte";
+	import WindowManager from "$lib/WindowManager.svelte";
 	import Window from "$lib/Window.svelte";
 
 	let windows = $state([
-		{ id: 3, title: 'Works with iframes', x: 20, y: 57, width: 300, height: 220, zIndex: 3, active: true },
-		{ id: 2, title: 'Documentation', x: 40, y: 100, width: 280, height: 180, zIndex: 2, active: false },
-		{ id: 1, title: 'Welcome', x: 5, y: 130, width: 320, height: 200, zIndex: 1, active: false },
+		{ id: 3, title: "Works with iframes", x: 20, y: 57, width: 300, height: 220, zIndex: 3, active: true },
+		{ id: 2, title: "Documentation", x: 40, y: 100, width: 280, height: 180, zIndex: 2, active: false },
+		{ id: 1, title: "Welcome", x: 5, y: 130, width: 320, height: 200, zIndex: 1, active: false }
 	]);
 </script>
 
@@ -55,7 +55,7 @@
 											<div class="h-3 w-3 rounded-full bg-muted-foreground/30"></div>
 										</div>
 									</div>
-									
+
 									<!-- Window content -->
 									<div class="flex flex-1 items-center justify-center text-center">
 										{#if window.id === 3}
@@ -67,7 +67,6 @@
 											{:else if window.id === 2}
 												Fully customizable and responsive. <br>
 												Works on mobile devices.
-												<button onclick={console.log}>Wow</button>
 											{/if}
 										</p>
 										{/if}

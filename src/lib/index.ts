@@ -2,7 +2,17 @@
 import { default as WindowManager } from "./WindowManager.svelte";
 import { default as Window } from "./Window.svelte";
 
-import type { WindowDragConfig, ActualWindowProps } from "./utils.js";
-import { MouseContext, WindowContext } from "./utils.js";
+import type { ActualWindowProps, WindowDimensions, WindowDragConfig, WindowPosition } from "./utils.js";
+import { INACTIVE_MOUSE_ID, MouseContext, WindowContext } from "./utils.js";
 
-export { WindowManager, Window, type WindowDragConfig, type ActualWindowProps, MouseContext, WindowContext }
+export {
+    INACTIVE_MOUSE_ID,
+    MouseContext,
+    Window,
+    WindowContext,
+    WindowManager,
+    type ActualWindowProps,
+    type WindowDimensions,
+    type WindowDragConfig,
+    type WindowPosition
+}

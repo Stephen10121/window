@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { Button } from '@/components/ui/button/index.js';
-	import { Copy, Check } from '@lucide/svelte';
-	
+	import { Button } from "../components/ui/button/index.js";
+	import { Copy, Check } from "@lucide/svelte";
+
 	let copiedInstall = $state(false);
 	let copied = $state(false);
-	
+
 	const installCodeExample = "npm install svelte-windows";
 	const codeExample = `<script>
     import { WindowManager, Window } from "svelte-windows";

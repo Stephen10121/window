@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
     import type { MouseContext } from "./utils.js";
+    import { preventScroll } from "./prevent-scroll.js";
 
     let {
         id,
@@ -10,7 +11,8 @@
         minWidth,
         desktop,
         active,
-        activated
+        activated,
+        onResizeStart
     }: {
        id: string,
        parentWindow: HTMLElement,
@@ -19,7 +21,8 @@
        minWidth: number,
        desktop: HTMLElement,
        active: boolean,
-       activated: () => unknown
+       activated: () => unknown,
+       onResizeStart?: () => unknown
     } = $props();
 
     let offsetX = $state(0);
@@ -36,6 +39,24 @@
         }
         mouseContext.setActiveMouseTarget(id);
         if (!active) activated();
+        if (onResizeStart) onResizeStart();
+    }
+
+    function touchIsDown(event: TouchEvent) {
+        const enableScroll = preventScroll();
+        const parentDimensions = parentWindow?.getBoundingClientRect();
+        const resizerDimensions = document.getElementById(id)?.getBoundingClientRect();
+        const touch = event.touches[0];
+
+        if (parentDimensions !== undefined) {
+            offsetX = parentDimensions.left;
+        }
+        if (resizerDimensions !== undefined) {
+            offsetX += touch.clientX - resizerDimensions.left;
+        }
+        mouseContext.setActiveMouseTarget(id, enableScroll);
+        if (!active) activated();
+        if (onResizeStart) onResizeStart();
     }
 
     const mouseMoveResponderDel = mouseContext.addMouseMoveResponder(id, (event) => {
@@ -48,7 +69,7 @@
     });
 </script>
 
-<div onmousedown={mouseIsDown} role="none" {id}></div>
+<div onmousedown={mouseIsDown} ontouchstart={touchIsDown} role="none" {id}></div>
 
 <style>
     div {
