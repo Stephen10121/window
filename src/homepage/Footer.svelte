@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="mt-8 border-t border-border pt-8 text-center text-sm text-muted-foreground">
-			<p>Built with Svelte - Created by Stephen Gruzin</p>
+			<p>Built with Svelte - Created by <a href="https://stephengruzin.dev" class="underline" target="_blank">Stephen Gruzin</a>. Contributions by: <a href="https://github.com/VikingDadMedic" class="underline" target="_blank">VikingDadMedic</a>.</p>
 		</div>
 	</div>
 </footer>
