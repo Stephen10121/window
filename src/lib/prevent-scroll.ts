@@ -54,6 +54,10 @@ export function getScrollParent(node: Element): Element {
 	return node || document.scrollingElement || document.documentElement;
 }
 
+function preventDefaultScroll(e: Event) {
+	e.preventDefault();
+}
+
 // The number of active usePreventScroll calls. Used to determine whether to revert back to the original page style/scroll position
 let preventScrollCount = 0;
 let restore: () => void;
@@ -68,6 +72,9 @@ export function preventScroll() {
 
 	preventScrollCount++;
 	if (preventScrollCount === 1) {
+		if (window) {
+			window.addEventListener("touchmove", preventDefaultScroll, { passive: false });
+		}
 		if (isIOS()) {
 			restore = preventScrollMobileSafari();
 		} else {
@@ -78,6 +85,9 @@ export function preventScroll() {
 	return () => {
 		preventScrollCount--;
 		if (preventScrollCount === 0) {
+			if (window) {
+				window.removeEventListener("touchmove", preventDefaultScroll);
+			}
 			restore();
 		}
 	};

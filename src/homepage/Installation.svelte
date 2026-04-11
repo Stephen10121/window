@@ -1,12 +1,14 @@
 <script lang="ts">
-	import { Button } from "../components/ui/button/index.js";
+	import Highlighter from "../components/Highlighter.svelte";
+import { Button } from "../components/ui/button/index.js";
 	import { Copy, Check } from "@lucide/svelte";
 
 	let copiedInstall = $state(false);
 	let copied = $state(false);
 
 	const installCodeExample = "npm install svelte-windows";
-	const codeExample = `<script>
+	const codeExample = `
+<script>
     import { WindowManager, Window } from "svelte-windows";
 
     const dragRegions = [{width:"100%",height:"100%",top:"0px",left:"0px"}]
@@ -73,7 +75,7 @@
 						{/if}
 					</Button>
 				</div>
-				<pre class="overflow-x-auto p-6"><code class="text-sm leading-relaxed text-muted-foreground">{codeExample}</code></pre>
+				<Highlighter language="svelte" code={codeExample} />
 			</div>
 		</div>
 	</div>

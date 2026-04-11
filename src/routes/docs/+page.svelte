@@ -1,8 +1,10 @@
 <script lang="ts">
+    import Highlighter from "../../components/Highlighter.svelte";
     import { Button } from "../../components/ui/button/index.js";
 
     const installCommand = "npm install svelte-windows";
-    const quickStartExample = `<script>
+    const quickStartExample = `
+<script>
     import { WindowManager, Window } from "svelte-windows";
 
     const dragRegions = [{ width: "100%", height: "40px", top: "0px", left: "0px" }];
@@ -20,7 +22,8 @@
     </WindowManager>
 </div>`;
 
-    const callbackExample = `<Window
+    const callbackExample = `
+<Window
     id="inspector"
     {context}
     bind:width
@@ -54,7 +57,8 @@
         { name: "windowContext", type: "WindowContext", default: "new WindowContext()", required: "No", description: "Optional shared window stack manager instance." }
     ];
 
-    const dragConfigExample = `const dragRegions = [
+    const dragConfigExample = `
+const dragRegions = [
     { top: "0px", left: "0px", width: "100%", height: "40px" },
     { bottom: "0px", right: "0px", width: "120px", height: "32px", color: "rgba(255,255,255,0.08)" }
 ];`;
@@ -120,7 +124,7 @@
             </p>
             <div class="mt-6 rounded-xl border border-border bg-card">
                 <div class="border-b border-border px-5 py-3 text-sm text-muted-foreground">Example.svelte</div>
-                <pre class="overflow-x-auto p-5"><code class="text-sm leading-relaxed text-muted-foreground">{quickStartExample}</code></pre>
+                <Highlighter language="svelte" code={quickStartExample} />
             </div>
         </div>
     </section>
@@ -174,7 +178,7 @@
             </ul>
             <div class="mt-6 rounded-xl border border-border bg-card">
                 <div class="border-b border-border px-5 py-3 text-sm text-muted-foreground">WindowDragConfig example</div>
-                <pre class="overflow-x-auto p-5"><code class="text-sm leading-relaxed text-muted-foreground">{dragConfigExample}</code></pre>
+                <Highlighter language="typescript" code={dragConfigExample} />
             </div>
         </div>
     </section>
@@ -229,7 +233,7 @@
             </div>
             <div class="mt-6 rounded-xl border border-border bg-card">
                 <div class="border-b border-border px-5 py-3 text-sm text-muted-foreground">Callback example</div>
-                <pre class="overflow-x-auto p-5"><code class="text-sm leading-relaxed text-muted-foreground">{callbackExample}</code></pre>
+                <Highlighter language="svelte" code={callbackExample} />
             </div>
         </div>
     </section>
@@ -270,7 +274,7 @@
         <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
             <h2 class="text-3xl font-bold tracking-tight">Exports</h2>
             <div class="mt-6 rounded-xl border border-border bg-card p-6">
-                <ul class="space-y-2 text-sm text-muted-foreground">
+                <ul class="space-y-2 text-sm text-muted-foreground anexport">
                     <li><code>WindowManager</code>, <code>Window</code></li>
                     <li><code>MouseContext</code>, <code>WindowContext</code></li>
                     <li><code>INACTIVE_MOUSE_ID</code></li>
@@ -280,3 +284,9 @@
         </div>
     </section>
 </main>
+
+<style>
+    .anexport li code {
+        color: #76b9db;
+    }
+</style>

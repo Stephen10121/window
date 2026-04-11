@@ -1,0 +1,36 @@
+.token.punctuation {
+    color: #727973;
+}
+
+.token.tag {
+    color: #ff6f43;
+}
+
+.token.keyword {
+    color: #bb7db3;
+}
+
+.token.string,
+.token.attr-name {
+    color: #76b9db;
+}
+
+.token.literal-property {
+    color: #e2e2e2;
+}
+
+.token.attr-value {
+    color: #58ce7b;
+}
+
+.token.language-javascript {
+    color: #e2e2e2;
+}
+
+.token.function {
+    color: #9291f1;
+}
+
+.language-svelte {
+    color: #9fb5b6;
+}
